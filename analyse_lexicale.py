@@ -3,7 +3,7 @@ from sly import Lexer
 
 class FloLexer(Lexer):
 	# Noms des lexèmes (sauf les litéraux). En majuscule. Ordre non important
-	tokens = { IDENTIFIANT, ENTIER, ECRIRE, INFERIEUR_OU_EGAL, SUPERIEUR_OU_EGAL, EGAL_EGAL, PAS_EGAL,
+	tokens = {IDENTIFIANT, ENTIER, ECRIRE, INFERIEUR_OU_EGAL, SUPERIEUR_OU_EGAL, EGAL_EGAL, PAS_EGAL,
                    INFERIEUR, SUPERIEUR, ET, OU, NON, BOOLEEN, MAX, RETOURNER, TANTQUE, SI, SINON_SI,
                    SINON, ASSIGNMENT, TYPE_VARIABLE, NOM_VARIABLE, LIRE}
 
@@ -11,6 +11,12 @@ class FloLexer(Lexer):
 	#Les litéraux sont vérifiés en dernier, après toutes les autres règles définies par des expressions régulières.
 	#Donc, si une règle commence par un de ces littérals (comme INFERIEUR_OU_EGAL), cette règle aura la priorité.
 	literals = { '+','*','(',')',';', '-', '%', '/', '{', '}', '!', ','}
+
+	#---------
+	#literals = { '+', '-', '*', '/', '(', ')', ';', '=', ',', '.', ':', '{', '}' }
+	#---------
+
+
 	
 	# chaines contenant les caractère à ignorer. Ici espace et tabulation
 	ignore = ' \t'
@@ -27,6 +33,21 @@ class FloLexer(Lexer):
 	NON= r'non'
 	ASSIGNMENT = r'='
 	
+	"""-----------------------------
+	NON = r'!'
+	BOOLEEN = r'true|false'
+	MAX = r'max'
+	RETOURNER = r'retourner'
+	TANTQUE = r'tantque'
+	SI = r'si'
+	SINON_SI = r'sinonsi'
+	SINON = r'sinon'
+	ASSIGNMENT = r':='
+	TYPE_VARIABLE = r'int|bool'
+	NOM_VARIABLE = r'[a-zA-Z][a-zA-Z0-9_]*'
+	LIRE = r'lire'
+	-----------------------------"""
+	
 	
 	@_(r'0|[1-9][0-9]*')
 	def ENTIER(self, t):
@@ -38,7 +59,7 @@ class FloLexer(Lexer):
                 t.value = bool(t.value)
                 return t
 
-    	# cas général
+    # cas général
 	IDENTIFIANT = r'[a-zA-Z][a-zA-Z0-9_]*' #en général, variable ou nom de fonction
 
 	# cas spéciaux:

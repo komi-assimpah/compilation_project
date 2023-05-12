@@ -40,10 +40,17 @@ class Operation:
 		self.exp1.afficher(indent+1)
 		self.exp2.afficher(indent+1)
 		afficher("</operation>",indent)
+
 class Entier:
 	def __init__(self,valeur):
 		self.valeur = valeur
 	def afficher(self,indent=0):
 		afficher("[Entier:"+str(self.valeur)+"]",indent)
 
-        
+
+class Identifiant:
+    def __init__(self, nom):
+        self.nom = nom
+    
+    def afficher(self, indent=0):
+        afficher("[Variable:"+str(self.nom)+"]", indent)

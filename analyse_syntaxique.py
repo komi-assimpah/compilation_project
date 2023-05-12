@@ -31,7 +31,18 @@ class FloParser(Parser):
 	@_('ECRIRE "(" expr ")" ";"')
 	def ecrire(self, p):
 		return arbre_abstrait.Ecrire(p.expr) #p.expr = p[2]
-		
+
+	
+
+	
+	
+	
+	@_('"-" expr "+" produit')
+	def expr(self, p):
+		return arbre_abstrait.Operation('-',p[3],p[1])
+
+
+	
 	@_('expr "+" produit')
 	def expr(self, p):
 		return arbre_abstrait.Operation('+',p[0],p[2])
@@ -56,9 +67,11 @@ class FloParser(Parser):
 	def produit(self, p):
             return arbre_abstrait.Operation('%', p[0], p[2])
 
-	@_('"-" facteur')
+
+	@_('"-" expr')
 	def produit(self, p):
-            return arbre_abstrait.Operation('-', p[0], p[2])                
+            return arbre_abstrait.Operation('*', arbre_abstrait.Entier(-1), p[1])
+	             
 
 	@_('facteur')
 	def produit(self, p):
@@ -66,23 +79,23 @@ class FloParser(Parser):
  
 	@_('"(" expr ")"')
 	def facteur(self, p):
-		return p.facteur #ou p[1]
+		return p[1]
 		
 	@_('ENTIER')
 	def facteur(self, p):
 		return arbre_abstrait.Entier(p.ENTIER) #p.ENTIER = p[0]
 
-	@_('nomVariable')
+	@_('IDENTIFIANT')
 	def facteur(self, p):
-		return arbre_abstrait.Entier(p.nomVariable)
+		return arbre_abstrait.Identifiant(p.IDENTIFIANT)
 
-	@_('lire()')
+	"""@_('lire()')
 	def facteur(self, p):
-		return arbre_abstrait.Entier(p.lire())
+		return arbre_abstrait.Entier(p.lire())"""
 
-	@_('nomFonction')
+	"""@_('nomFonction')
 	def facteur(self, p):
-		return arbre_abstrait.Entier(p.nomFonction)	
+		return arbre_abstrait.Entier(p.nomFonction)	"""
 
 if __name__ == '__main__':
 	lexer = FloLexer()
@@ -97,4 +110,3 @@ if __name__ == '__main__':
 			    arbre.afficher()
 			except EOFError:
 			    exit()
-

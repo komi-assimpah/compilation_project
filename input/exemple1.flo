@@ -1,1 +1,2 @@
-ecrire(42);
+ENTIER a=1;
+ecrire(a);

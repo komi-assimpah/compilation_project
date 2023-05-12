@@ -123,6 +123,7 @@ def gen_operation(operation):
 		nasm_instruction(code[op], "eax", "ebx", "", "effectue l'opération eax" +op+"ebx et met le résultat dans eax" )
 	if op == '*':
 		nasm_instruction(code[op], "ebx", "", "", "effectue l'opération eax" +op+"ebx et met le résultat dans eax" )
+	
 	nasm_instruction("push",  "eax" , "", "", "empile le résultat");	
 
 
