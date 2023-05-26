@@ -1,0 +1,299 @@
+Grammar:
+
+Rule 0     S' -> statement
+Rule 1     statement -> prog
+Rule 2     prog -> listeInstructions
+Rule 3     listeInstructions -> listeInstructions instruction
+Rule 4     listeInstructions -> instruction
+Rule 5     instruction -> affectation
+Rule 6     instruction -> ecrire
+Rule 7     ecrire -> ECRIRE ( expr ) ;
+Rule 8     affectation -> IDENTIFIANT = expr ;
+Rule 9     expr -> term
+Rule 10    term -> factor
+Rule 11    factor -> ( expr )
+Rule 12    factor -> IDENTIFIANT
+Rule 13    factor -> ENTIER
+
+Unused terminals:
+
+    SUPERIEUR
+    MAX
+    ASSIGNMENT
+    TYPE_VARIABLE
+    RETOURNER
+    TANTQUE
+    PAS_EGAL
+    INFERIEUR_OU_EGAL
+    NOM_VARIABLE
+    SINON
+    SUPERIEUR_OU_EGAL
+    SINON_SI
+    BOOLEEN
+    ENT
+    INFERIEUR
+    EGAL_EGAL
+    SI
+    ET
+    OU
+    LIRE
+    NON
+
+Terminals, with rules where they appear:
+
+(                    : 7 11
+)                    : 7 11
+;                    : 7 8
+=                    : 8
+ASSIGNMENT           : 
+BOOLEEN              : 
+ECRIRE               : 7
+EGAL_EGAL            : 
+ENT                  : 
+ENTIER               : 13
+ET                   : 
+IDENTIFIANT          : 8 12
+INFERIEUR            : 
+INFERIEUR_OU_EGAL    : 
+LIRE                 : 
+MAX                  : 
+NOM_VARIABLE         : 
+NON                  : 
+OU                   : 
+PAS_EGAL             : 
+RETOURNER            : 
+SI                   : 
+SINON                : 
+SINON_SI             : 
+SUPERIEUR            : 
+SUPERIEUR_OU_EGAL    : 
+TANTQUE              : 
+TYPE_VARIABLE        : 
+error                : 
+
+Nonterminals, with rules where they appear:
+
+affectation          : 5
+ecrire               : 6
+expr                 : 7 8 11
+factor               : 10
+instruction          : 3 4
+listeInstructions    : 2 3
+prog                 : 1
+statement            : 0
+term                 : 9
+
+
+state 0
+
+    (0) S' -> . statement
+    (1) statement -> . prog
+    (2) prog -> . listeInstructions
+    (3) listeInstructions -> . listeInstructions instruction
+    (4) listeInstructions -> . instruction
+    (5) instruction -> . affectation
+    (6) instruction -> . ecrire
+    (8) affectation -> . IDENTIFIANT = expr ;
+    (7) ecrire -> . ECRIRE ( expr ) ;
+    IDENTIFIANT     shift and go to state 7
+    ECRIRE          shift and go to state 8
+
+    statement                      shift and go to state 1
+    prog                           shift and go to state 2
+    listeInstructions              shift and go to state 3
+    instruction                    shift and go to state 4
+    affectation                    shift and go to state 5
+    ecrire                         shift and go to state 6
+
+state 1
+
+    (0) S' -> statement .
+
+
+state 2
+
+    (1) statement -> prog .
+    $end            reduce using rule 1 (statement -> prog .)
+
+
+state 3
+
+    (2) prog -> listeInstructions .
+    (3) listeInstructions -> listeInstructions . instruction
+    (5) instruction -> . affectation
+    (6) instruction -> . ecrire
+    (8) affectation -> . IDENTIFIANT = expr ;
+    (7) ecrire -> . ECRIRE ( expr ) ;
+    $end            reduce using rule 2 (prog -> listeInstructions .)
+    IDENTIFIANT     shift and go to state 7
+    ECRIRE          shift and go to state 8
+
+    instruction                    shift and go to state 9
+    affectation                    shift and go to state 5
+    ecrire                         shift and go to state 6
+
+state 4
+
+    (4) listeInstructions -> instruction .
+    IDENTIFIANT     reduce using rule 4 (listeInstructions -> instruction .)
+    ECRIRE          reduce using rule 4 (listeInstructions -> instruction .)
+    $end            reduce using rule 4 (listeInstructions -> instruction .)
+
+
+state 5
+
+    (5) instruction -> affectation .
+    IDENTIFIANT     reduce using rule 5 (instruction -> affectation .)
+    ECRIRE          reduce using rule 5 (instruction -> affectation .)
+    $end            reduce using rule 5 (instruction -> affectation .)
+
+
+state 6
+
+    (6) instruction -> ecrire .
+    IDENTIFIANT     reduce using rule 6 (instruction -> ecrire .)
+    ECRIRE          reduce using rule 6 (instruction -> ecrire .)
+    $end            reduce using rule 6 (instruction -> ecrire .)
+
+
+state 7
+
+    (8) affectation -> IDENTIFIANT . = expr ;
+    =               shift and go to state 10
+
+
+state 8
+
+    (7) ecrire -> ECRIRE . ( expr ) ;
+    (               shift and go to state 11
+
+
+state 9
+
+    (3) listeInstructions -> listeInstructions instruction .
+    IDENTIFIANT     reduce using rule 3 (listeInstructions -> listeInstructions instruction .)
+    ECRIRE          reduce using rule 3 (listeInstructions -> listeInstructions instruction .)
+    $end            reduce using rule 3 (listeInstructions -> listeInstructions instruction .)
+
+
+state 10
+
+    (8) affectation -> IDENTIFIANT = . expr ;
+    (9) expr -> . term
+    (10) term -> . factor
+    (11) factor -> . ( expr )
+    (12) factor -> . IDENTIFIANT
+    (13) factor -> . ENTIER
+    (               shift and go to state 16
+    IDENTIFIANT     shift and go to state 12
+    ENTIER          shift and go to state 17
+
+    expr                           shift and go to state 13
+    term                           shift and go to state 14
+    factor                         shift and go to state 15
+
+state 11
+
+    (7) ecrire -> ECRIRE ( . expr ) ;
+    (9) expr -> . term
+    (10) term -> . factor
+    (11) factor -> . ( expr )
+    (12) factor -> . IDENTIFIANT
+    (13) factor -> . ENTIER
+    (               shift and go to state 16
+    IDENTIFIANT     shift and go to state 12
+    ENTIER          shift and go to state 17
+
+    expr                           shift and go to state 18
+    term                           shift and go to state 14
+    factor                         shift and go to state 15
+
+state 12
+
+    (12) factor -> IDENTIFIANT .
+    ;               reduce using rule 12 (factor -> IDENTIFIANT .)
+    )               reduce using rule 12 (factor -> IDENTIFIANT .)
+
+
+state 13
+
+    (8) affectation -> IDENTIFIANT = expr . ;
+    ;               shift and go to state 19
+
+
+state 14
+
+    (9) expr -> term .
+    ;               reduce using rule 9 (expr -> term .)
+    )               reduce using rule 9 (expr -> term .)
+
+
+state 15
+
+    (10) term -> factor .
+    ;               reduce using rule 10 (term -> factor .)
+    )               reduce using rule 10 (term -> factor .)
+
+
+state 16
+
+    (11) factor -> ( . expr )
+    (9) expr -> . term
+    (10) term -> . factor
+    (11) factor -> . ( expr )
+    (12) factor -> . IDENTIFIANT
+    (13) factor -> . ENTIER
+    (               shift and go to state 16
+    IDENTIFIANT     shift and go to state 12
+    ENTIER          shift and go to state 17
+
+    expr                           shift and go to state 20
+    term                           shift and go to state 14
+    factor                         shift and go to state 15
+
+state 17
+
+    (13) factor -> ENTIER .
+    ;               reduce using rule 13 (factor -> ENTIER .)
+    )               reduce using rule 13 (factor -> ENTIER .)
+
+
+state 18
+
+    (7) ecrire -> ECRIRE ( expr . ) ;
+    )               shift and go to state 21
+
+
+state 19
+
+    (8) affectation -> IDENTIFIANT = expr ; .
+    IDENTIFIANT     reduce using rule 8 (affectation -> IDENTIFIANT = expr ; .)
+    ECRIRE          reduce using rule 8 (affectation -> IDENTIFIANT = expr ; .)
+    $end            reduce using rule 8 (affectation -> IDENTIFIANT = expr ; .)
+
+
+state 20
+
+    (11) factor -> ( expr . )
+    )               shift and go to state 22
+
+
+state 21
+
+    (7) ecrire -> ECRIRE ( expr ) . ;
+    ;               shift and go to state 23
+
+
+state 22
+
+    (11) factor -> ( expr ) .
+    ;               reduce using rule 11 (factor -> ( expr ) .)
+    )               reduce using rule 11 (factor -> ( expr ) .)
+
+
+state 23
+
+    (7) ecrire -> ECRIRE ( expr ) ; .
+    IDENTIFIANT     reduce using rule 7 (ecrire -> ECRIRE ( expr ) ; .)
+    ECRIRE          reduce using rule 7 (ecrire -> ECRIRE ( expr ) ; .)
+    $end            reduce using rule 7 (ecrire -> ECRIRE ( expr ) ; .)

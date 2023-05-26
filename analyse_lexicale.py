@@ -3,17 +3,17 @@ from sly import Lexer
 
 class FloLexer(Lexer):
 	# Noms des lexèmes (sauf les litéraux). En majuscule. Ordre non important
-	tokens = {IDENTIFIANT, ENTIER, ECRIRE, INFERIEUR_OU_EGAL, SUPERIEUR_OU_EGAL, EGAL_EGAL, PAS_EGAL,
+	tokens = {IDENTIFIANT, ENTIER, ENT, ECRIRE, INFERIEUR_OU_EGAL, SUPERIEUR_OU_EGAL, EGAL_EGAL, PAS_EGAL,
                    INFERIEUR, SUPERIEUR, ET, OU, NON, BOOLEEN, MAX, RETOURNER, TANTQUE, SI, SINON_SI,
                    SINON, ASSIGNMENT, TYPE_VARIABLE, NOM_VARIABLE, LIRE}
 
 	#Les caractères litéraux sont des caractères uniques qui sont retournés tel quel quand rencontré par l'analyse lexicale. 
 	#Les litéraux sont vérifiés en dernier, après toutes les autres règles définies par des expressions régulières.
 	#Donc, si une règle commence par un de ces littérals (comme INFERIEUR_OU_EGAL), cette règle aura la priorité.
-	literals = { '+','*','(',')',';', '-', '%', '/', '{', '}', '!', ','}
+	literals = { '+','*','(',')',';', '-', '%', '/', '{', '}', '!', ',', '&', '='}
 
 	#---------
-	#literals = { '+', '-', '*', '/', '(', ')', ';', '=', ',', '.', ':', '{', '}' }
+	#literals = {';', '.', ':',  }
 	#---------
 
 
@@ -22,6 +22,7 @@ class FloLexer(Lexer):
 	ignore = ' \t'
 
 	# Expressions régulières correspondant au différents Lexèmes par ordre de priorité
+	ENT = r'entier'
 	EGAL_EGAL= r'=='
 	PAS_EGAL= r'!='
 	INFERIEUR= r'<'
@@ -32,9 +33,9 @@ class FloLexer(Lexer):
 	OU= r'ou'
 	NON= r'non'
 	ASSIGNMENT = r'='
+
 	
 	"""-----------------------------
-	NON = r'!'
 	BOOLEEN = r'true|false'
 	MAX = r'max'
 	RETOURNER = r'retourner'
@@ -42,7 +43,6 @@ class FloLexer(Lexer):
 	SI = r'si'
 	SINON_SI = r'sinonsi'
 	SINON = r'sinon'
-	ASSIGNMENT = r':='
 	TYPE_VARIABLE = r'int|bool'
 	NOM_VARIABLE = r'[a-zA-Z][a-zA-Z0-9_]*'
 	LIRE = r'lire'
@@ -64,15 +64,7 @@ class FloLexer(Lexer):
 
 	# cas spéciaux:
 	IDENTIFIANT['ecrire'] = ECRIRE
-	IDENTIFIANT['lire'] = LIRE   #LIRE ????
-	IDENTIFIANT['max'] = MAX
-	IDENTIFIANT['retourner'] = RETOURNER
-	IDENTIFIANT['sinon si'] = SINON_SI
-	IDENTIFIANT['si'] = SI
-	IDENTIFIANT['sinon'] = SINON
-	IDENTIFIANT['tantque'] = TANTQUE
-	IDENTIFIANT['booleen'] = TYPE_VARIABLE
-	IDENTIFIANT['entier'] = TYPE_VARIABLE
+
 	
 	#Syntaxe des commentaires à ignorer
 	ignore_comment = r'\#.*'

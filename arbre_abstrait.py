@@ -46,11 +46,21 @@ class Entier:
 		self.valeur = valeur
 	def afficher(self,indent=0):
 		afficher("[Entier:"+str(self.valeur)+"]",indent)
-
-
+  
 class Identifiant:
-    def __init__(self, nom):
-        self.nom = nom
-    
+    def __init__(self, nomDevariable):
+        self.nomDevariable = nomDevariable
     def afficher(self, indent=0):
-        afficher("[Variable:"+str(self.nom)+"]", indent)
+        afficher("[nomDevariable:"+str(self.nomDevariable)+"]", indent)
+
+
+class Affectation:
+    def __init__(self, identifiant, expression):
+        self.identifiant = identifiant
+        self.expression = expression
+
+    def afficher(self, indent=0):
+        afficher("<affectation>", indent)
+        afficher(f"[Identifiant: {self.identifiant}]", indent + 1)
+        self.expression.afficher(indent + 1)
+        afficher("</affectation>", indent)
