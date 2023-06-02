@@ -3,9 +3,12 @@ from sly import Lexer
 
 class FloLexer(Lexer):
 	# Noms des lexèmes (sauf les litéraux). En majuscule. Ordre non important
-	tokens = {IDENTIFIANT, ENTIER, ENT, ECRIRE, INFERIEUR_OU_EGAL, SUPERIEUR_OU_EGAL, EGAL_EGAL, PAS_EGAL,
-                   INFERIEUR, SUPERIEUR, ET, OU, NON, BOOLEEN, MAX, RETOURNER, TANTQUE, SI, SINON_SI,
-                   SINON, ASSIGNMENT, TYPE_VARIABLE, NOM_VARIABLE, LIRE}
+	tokens = {IDENTIFIANT, ENTIER, BOOLEEN, ECRIRE, INFERIEUR_OU_EGAL, SUPERIEUR_OU_EGAL, EGAL_EGAL, PAS_EGAL,
+                   INFERIEUR, SUPERIEUR, MAX, RETOURNER, TANTQUE, SI, SINON_SI,
+                   SINON, ASSIGNMENT, TYPE_VARIABLE, NOM_VARIABLE, LIRE,
+                   VRAI, FAUX,
+                   ET, OU, NON
+            }
 
 	#Les caractères litéraux sont des caractères uniques qui sont retournés tel quel quand rencontré par l'analyse lexicale. 
 	#Les litéraux sont vérifiés en dernier, après toutes les autres règles définies par des expressions régulières.
@@ -22,7 +25,6 @@ class FloLexer(Lexer):
 	ignore = ' \t'
 
 	# Expressions régulières correspondant au différents Lexèmes par ordre de priorité
-	ENT = r'entier'
 	EGAL_EGAL= r'=='
 	PAS_EGAL= r'!='
 	INFERIEUR= r'<'
@@ -33,10 +35,11 @@ class FloLexer(Lexer):
 	OU= r'ou'
 	NON= r'non'
 	ASSIGNMENT = r'='
+	VRAI = r'Vrai'
+	FAUX = r'Faux'
 
 	
 	"""-----------------------------
-	BOOLEEN = r'true|false'
 	MAX = r'max'
 	RETOURNER = r'retourner'
 	TANTQUE = r'tantque'
@@ -54,10 +57,23 @@ class FloLexer(Lexer):
 		t.value = int(t.value)
 		return t
 
-	@_(r'Vrai|Faux')
+
+            
+# Règle pour les booléens
+	"""@_(r'Vrai|Faux')
 	def BOOLEEN(self, t):
-                t.value = bool(t.value)
-                return t
+		t.value = bool(t.value)
+		return t"""
+	@_(VRAI)
+	def VRAI(self, t):
+		t.value = True
+		return t
+
+	@_(FAUX)
+	def FAUX(self, t):
+		t.value = False
+		return t
+
 
     # cas général
 	IDENTIFIANT = r'[a-zA-Z][a-zA-Z0-9_]*' #en général, variable ou nom de fonction

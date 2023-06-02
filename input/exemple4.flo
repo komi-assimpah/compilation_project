@@ -1,2 +1,2 @@
-int x =2;
-ecrire(x);
+ecrire(Vrai);
+ecrire(2);

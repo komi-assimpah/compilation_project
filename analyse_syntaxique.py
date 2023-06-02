@@ -70,6 +70,18 @@ class FloParser(Parser):
 	def facteur(self, p):
 		return arbre_abstrait.Entier(p.ENTIER) #p.ENTIER = p[0]
 
+	"""@_('BOOLEEN')
+	def facteur(self, p):
+		return arbre_abstrait.Booleen(p.BOOLEEN)"""
+	@_('VRAI')
+	def facteur(self, p):
+		return arbre_abstrait.Booleen(True)
+
+	@_('FAUX')
+	def facteur(self, p):
+		return arbre_abstrait.Booleen(False)
+
+
 	@_('IDENTIFIANT')
 	def facteur(self, p):
 		return arbre_abstrait.Identifiant(p.IDENTIFIANT)
