@@ -1,0 +1,19 @@
+#ecrire(-7);
+#ecrire(1%3);
+#ecrire(9/3);
+#ecrire(-1*7+3);
+#ecrire(myInt = 7);
+#ecrire(lire(9/3));
+#ecrire(1+3<2+7);
+si(-7){
+res = entier1;
+#sinon_si(-7){
+#res = entier1;
+#entier thisINT;
+#retourner(-7);
+#
+
+
+#entier thisInt = -6;
+
+#appel_fonction(7);

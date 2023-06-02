@@ -3,83 +3,55 @@ from sly import Lexer
 
 class FloLexer(Lexer):
 	# Noms des lexèmes (sauf les litéraux). En majuscule. Ordre non important
-	tokens = {IDENTIFIANT, ENTIER, BOOLEEN, ECRIRE, INFERIEUR_OU_EGAL, SUPERIEUR_OU_EGAL, EGAL_EGAL, PAS_EGAL,
-                   INFERIEUR, SUPERIEUR, MAX, RETOURNER, TANTQUE, SI, SINON_SI,
-                   SINON, ASSIGNMENT, TYPE_VARIABLE, NOM_VARIABLE, LIRE,
-                   VRAI, FAUX,
-                   ET, OU, NON
-            }
+	tokens = { IDENTIFIANT, ENTIER, BOOLEEN, ECRIRE, INFERIEUR_OU_EGAL, EGAL, PAS_EGAL,
+                   INFERIEUR, SUPERIEUR, SUPERIEUR_OU_EGAL, ET, OU, NON, AFFECTATION, LIRE,
+                   MAX, RETOURNER, SINON_SI, SI, SINON, TANTQUE, TYPE, VRAI, FAUX}
 
 	#Les caractères litéraux sont des caractères uniques qui sont retournés tel quel quand rencontré par l'analyse lexicale. 
 	#Les litéraux sont vérifiés en dernier, après toutes les autres règles définies par des expressions régulières.
 	#Donc, si une règle commence par un de ces littérals (comme INFERIEUR_OU_EGAL), cette règle aura la priorité.
-	literals = { '+','*','(',')',';', '-', '%', '/', '{', '}', '!', ',', '&', '='}
-
-	#---------
-	#literals = {';', '.', ':',  }
-	#---------
-
-
+	literals = { '+','*','(',')',";",'-','/','%', '{', '}', ',' }
 	
 	# chaines contenant les caractère à ignorer. Ici espace et tabulation
 	ignore = ' \t'
 
 	# Expressions régulières correspondant au différents Lexèmes par ordre de priorité
-	EGAL_EGAL= r'=='
-	PAS_EGAL= r'!='
-	INFERIEUR= r'<'
-	SUPERIEUR= r'>'
+	EGAL= r'=='
+	PAS_EGAL = r'!='
+	INFERIEUR = r'<'
+	SUPERIEUR = r'>'
 	INFERIEUR_OU_EGAL= r'<='
 	SUPERIEUR_OU_EGAL= r'>='
 	ET= r'et'
 	OU= r'ou'
 	NON= r'non'
-	ASSIGNMENT = r'='
-	VRAI = r'Vrai'
-	FAUX = r'Faux'
-
-	
-	"""-----------------------------
-	MAX = r'max'
-	RETOURNER = r'retourner'
-	TANTQUE = r'tantque'
-	SI = r'si'
-	SINON_SI = r'sinonsi'
-	SINON = r'sinon'
-	TYPE_VARIABLE = r'int|bool'
-	NOM_VARIABLE = r'[a-zA-Z][a-zA-Z0-9_]*'
-	LIRE = r'lire'
-	-----------------------------"""
-	
+	AFFECTATION= r'='
 	
 	@_(r'0|[1-9][0-9]*')
 	def ENTIER(self, t):
 		t.value = int(t.value)
 		return t
 
-
-            
-# Règle pour les booléens
-	"""@_(r'Vrai|Faux')
+	@_('VRAI|FAUX')
 	def BOOLEEN(self, t):
-		t.value = bool(t.value)
-		return t"""
-	@_(VRAI)
-	def VRAI(self, t):
-		t.value = True
-		return t
-
-	@_(FAUX)
-	def FAUX(self, t):
-		t.value = False
-		return t
+                t.value = bool(t.value)
+                return t
 
 
-    # cas général
+    	# cas général
 	IDENTIFIANT = r'[a-zA-Z][a-zA-Z0-9_]*' #en général, variable ou nom de fonction
 
 	# cas spéciaux:
 	IDENTIFIANT['ecrire'] = ECRIRE
+	IDENTIFIANT['lire'] = LIRE
+	IDENTIFIANT['max'] = MAX
+	IDENTIFIANT['retourner'] = RETOURNER
+	IDENTIFIANT['sinon_si'] = SINON_SI
+	IDENTIFIANT['si'] = SI
+	IDENTIFIANT['sinon'] = SINON
+	IDENTIFIANT['tantque'] = TANTQUE
+	IDENTIFIANT['entier'] = TYPE
+	IDENTIFIANT['booleen'] = TYPE
 
 	
 	#Syntaxe des commentaires à ignorer
