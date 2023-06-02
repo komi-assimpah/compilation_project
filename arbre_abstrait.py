@@ -51,7 +51,7 @@ class Booleen:
 	def __init__(self, valeur):
 		self.valeur = valeur
 	def afficher(self, indent=0):
-		afficher("Booleen:"+str(self.valeur)+"]",indent)
+		afficher("[Booleen:"+str(self.valeur)+"]",indent)
      
 class Identifiant:
     def __init__(self, nomDevariable):
