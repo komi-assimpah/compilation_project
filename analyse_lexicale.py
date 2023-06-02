@@ -66,7 +66,7 @@ class FloLexer(Lexer):
 		return t"""
 	@_(VRAI)
 	def VRAI(self, t):
-		t.value = True
+		t.value = "True"
 		return t
 
 	@_(FAUX)

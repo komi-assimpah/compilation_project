@@ -40,6 +40,28 @@ class Operation:
 		self.exp1.afficher(indent+1)
 		self.exp2.afficher(indent+1)
 		afficher("</operation>",indent)
+  
+class Negation:
+	def __init__(self,op,bool1):
+		self.bool1 = bool1
+		self.op = op
+	def afficher(self,indent=0):
+		afficher("<negation>",indent)
+		afficher(self.op,indent+1)
+		self.bool1.afficher(indent+1)
+		afficher("</negation>",indent)
+
+class Conjonction:
+	def __init__(self,op,bool1,bool2):
+		self.bool1 = bool1
+		self.op = op
+		self.bool2 = bool2
+	def afficher(self,indent=0):
+		afficher("<conjonction>",indent)
+		afficher(self.op,indent+1)
+		self.bool1.afficher(indent+1)
+		self.bool2.afficher(indent+1)
+		afficher("</conjonction>",indent)
 
 class Entier:
 	def __init__(self,valeur):
@@ -60,7 +82,7 @@ class Identifiant:
         afficher("[nomDevariable:"+str(self.nomDevariable)+"]", indent)
 
 
-class Affectation:
+"""class Affectation:
     def __init__(self, identifiant, expression):
         self.identifiant = identifiant
         self.expression = expression
@@ -68,4 +90,4 @@ class Affectation:
         afficher("<affectation>", indent)
         afficher(f"[Identifiant: {self.identifiant}]", indent + 1)
         self.expression.afficher(indent + 1)
-        afficher("</affectation>", indent)
+        afficher("</affectation>", indent)"""

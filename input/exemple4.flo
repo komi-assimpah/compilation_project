@@ -1,2 +1,11 @@
-ecrire(Vrai);
-ecrire(2);
+#ecrire(Vrai);
+#ecrire(Faux);
+#ecrire(non Vrai);
+#ecrire(non Faux);
+#ecrire(non 6);
+
+#ecrire(Vrai ou Faux);
+#ecrire(non Vrai ou Faux);
+
+a = 8;
+ecrire(non a);

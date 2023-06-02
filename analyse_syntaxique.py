@@ -27,9 +27,9 @@ class FloParser(Parser):
 	def instruction(self, p):
 		return p[0]
 
-	@_('affectation')
+	"""@_('affectation')
 	def instruction(self, p):
-		return p[0]
+		return p[0]"""
 			
 	@_('ECRIRE "(" expr ")" ";"')
 	def ecrire(self, p):
@@ -41,6 +41,11 @@ class FloParser(Parser):
 	
 	@_('expr "+" produit')
 	def expr(self, p):
+		return arbre_abstrait.Operation('+',p[0],p[2])
+
+	#edit
+	@_('somme "+" produit')
+	def somme(self, p):
 		return arbre_abstrait.Operation('+',p[0],p[2])
 
 	@_('expr "-" produit')
@@ -63,6 +68,12 @@ class FloParser(Parser):
 	def produit(self, p):
             return arbre_abstrait.Operation('*', arbre_abstrait.Entier(-1), p[1])
 	             
+	#3.3 Operarteurs Logiques
+	@_('NON booleen')
+	def booleen(self, p):
+                return arbre_abstrait.Negation('non', p.booleen)
+
+
 
 
 
@@ -70,15 +81,16 @@ class FloParser(Parser):
 	def facteur(self, p):
 		return arbre_abstrait.Entier(p.ENTIER) #p.ENTIER = p[0]
 
-	"""@_('BOOLEEN')
+	@_('BOOLEEN')
 	def facteur(self, p):
-		return arbre_abstrait.Booleen(p.BOOLEEN)"""
+		return arbre_abstrait.Booleen(p.BOOLEEN)
+  
 	@_('VRAI')
-	def facteur(self, p):
+	def booleen(self, p):
 		return arbre_abstrait.Booleen(True)
 
 	@_('FAUX')
-	def facteur(self, p):
+	def booleen(self, p):
 		return arbre_abstrait.Booleen(False)
 
 
@@ -86,23 +98,48 @@ class FloParser(Parser):
 	def facteur(self, p):
 		return arbre_abstrait.Identifiant(p.IDENTIFIANT)
 
-	@_('IDENTIFIANT "=" expr ";"')
+	#edit
+	@_('IDENTIFIANT')
+	def variable(self, p):
+		return arbre_abstrait.Identifiant(p.IDENTIFIANT)
+
+
+	"""@_('IDENTIFIANT "=" expr ";"')
 	def affectation(self, p):
-		return arbre_abstrait.Affectation(p.IDENTIFIANT, p.expr)
+		return arbre_abstrait.Affectation(p.IDENTIFIANT, p.expr)"""
 
 	@_('produit')
 	def expr(self, p):
             return p.produit
+        
+    #edit
+	@_('produit')
+	def somme(self, p):
+		return p.produit
+    
+    
 
 	@_('facteur')
 	def produit(self, p):
-            return p.facteur
+		return p.facteur
+
+	@_('variable')
+	def facteur(self, p):
+		return p.variable
 
 	@_('"(" expr ")"')
 	def facteur(self, p):
 		return p[1]
 		
+	@_('booleen')
+	def expr(self, p):
+		return p.booleen #ou p[1]
 
+	@_('somme')
+	def booleen(self, p):
+		return p.somme
+
+	
 
 	"""@_('lire()')
 	def facteur(self, p):
