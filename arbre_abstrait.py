@@ -58,7 +58,6 @@ class Affectation:
     def __init__(self, identifiant, expression):
         self.identifiant = identifiant
         self.expression = expression
-
     def afficher(self, indent=0):
         afficher("<affectation>", indent)
         afficher(f"[Identifiant: {self.identifiant}]", indent + 1)
