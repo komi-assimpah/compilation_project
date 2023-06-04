@@ -51,6 +51,18 @@ class Negation:
 		self.bool1.afficher(indent+1)
 		afficher("</negation>",indent)
 
+class Disjonction:
+	def __init__(self,op,bool1,bool2):
+		self.bool1 = bool1
+		self.op = op
+		self.bool2 = bool2
+	def afficher(self,indent=0):
+		afficher("<disjonction>",indent)
+		afficher(self.op,indent+1)
+		self.bool1.afficher(indent+1)
+		self.bool2.afficher(indent+1)
+		afficher("</disjonction>",indent)
+
 class Conjonction:
 	def __init__(self,op,bool1,bool2):
 		self.bool1 = bool1
@@ -63,6 +75,7 @@ class Conjonction:
 		self.bool2.afficher(indent+1)
 		afficher("</conjonction>",indent)
 
+
 class Entier:
 	def __init__(self,valeur):
 		self.valeur = valeur
@@ -73,7 +86,12 @@ class Booleen:
 	def __init__(self, valeur):
 		self.valeur = valeur
 	def afficher(self, indent=0):
-		afficher("[Booleen:"+str(self.valeur)+"]",indent)
+		if (self.valeur == True):
+			afficher(f"[Booleen:vrai]", indent)
+		elif (self.valeur == False):
+			afficher(f"[Booleen:faux]", indent)
+		else:
+				afficher("[Booleen:"+str(self.valeur)+"]", indent)
      
 class Identifiant:
     def __init__(self, nomDevariable):

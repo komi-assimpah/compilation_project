@@ -4,8 +4,11 @@
 #ecrire(non Faux);
 #ecrire(non 6);
 
-#ecrire(Vrai ou Faux);
+#ecrire(a ou b);
 #ecrire(non Vrai ou Faux);
 
-a = 8;
-ecrire(non a);
+#ecrire(non Vrai et Faux);
+
+#ecrire(Vrai et non Faux);
+
+#ecrire( ((non Vrai) et Faux) ou (non Vrai) )

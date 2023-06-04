@@ -71,9 +71,15 @@ class FloParser(Parser):
 	#3.3 Operarteurs Logiques
 	@_('NON booleen')
 	def booleen(self, p):
-                return arbre_abstrait.Negation('non', p.booleen)
+		return arbre_abstrait.Negation('non', p.booleen)
 
-
+	@_('expr OU expr')
+	def booleen(self, p):
+		return arbre_abstrait.Disjonction(p[1], p[0], p[2])
+            
+	@_('expr ET expr')
+	def booleen(self, p):
+		return arbre_abstrait.Conjonction(p[1], p[0], p[2])
 
 
 
