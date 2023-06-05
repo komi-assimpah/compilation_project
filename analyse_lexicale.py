@@ -3,11 +3,15 @@ from sly import Lexer
 
 class FloLexer(Lexer):
 	# Noms des lexèmes (sauf les litéraux). En majuscule. Ordre non important
-	tokens = {IDENTIFIANT, ENTIER, BOOLEEN, ECRIRE, INFERIEUR_OU_EGAL, SUPERIEUR_OU_EGAL, EGAL_EGAL, PAS_EGAL,
-                   INFERIEUR, SUPERIEUR, MAX, RETOURNER, TANTQUE, SI, SINON_SI,
+	tokens = {IDENTIFIANT, ENTIER, BOOLEEN, ECRIRE,
+           		   INFERIEUR, INFERIEUR_OU_EGAL,
+                   EGAL, PAS_EGAL,
+                   SUPERIEUR, SUPERIEUR_OU_EGAL,
+                   MAX, RETOURNER, TANTQUE, SI, SINON_SI,
                    SINON, ASSIGNMENT, TYPE_VARIABLE, NOM_VARIABLE, LIRE,
                    VRAI, FAUX,
-                   ET, OU, NON
+                   NON, ET, OU,
+                   COMPARATEUR
             }
 
 	#Les caractères litéraux sont des caractères uniques qui sont retournés tel quel quand rencontré par l'analyse lexicale. 
@@ -15,9 +19,6 @@ class FloLexer(Lexer):
 	#Donc, si une règle commence par un de ces littérals (comme INFERIEUR_OU_EGAL), cette règle aura la priorité.
 	literals = { '+','*','(',')',';', '-', '%', '/', '{', '}', '!', ',', '&', '='}
 
-	#---------
-	#literals = {';', '.', ':',  }
-	#---------
 
 
 	
@@ -25,16 +26,10 @@ class FloLexer(Lexer):
 	ignore = ' \t'
 
 	# Expressions régulières correspondant au différents Lexèmes par ordre de priorité
-	EGAL_EGAL= r'=='
-	PAS_EGAL= r'!='
-	INFERIEUR= r'<'
-	SUPERIEUR= r'>'
-	INFERIEUR_OU_EGAL= r'<='
-	SUPERIEUR_OU_EGAL= r'>='
+
 	NON= r'non'
 	OU= r'ou'
 	ET= r'et'
-	ASSIGNMENT = r'='
 	VRAI = r'Vrai'
 	FAUX = r'Faux'
 
@@ -60,10 +55,6 @@ class FloLexer(Lexer):
 
             
 # Règle pour les booléens
-	"""@_(r'Vrai|Faux')
-	def BOOLEEN(self, t):
-		t.value = bool(t.value)
-		return t"""
 	@_(VRAI)
 	def VRAI(self, t):
 		t.value = "True"
@@ -74,6 +65,9 @@ class FloLexer(Lexer):
 		t.value = False
 		return t
 
+	@_(r'<=|>=|<|>|==|!=')
+	def COMPARATEUR(self, t):
+		return t
 
     # cas général
 	IDENTIFIANT = r'[a-zA-Z][a-zA-Z0-9_]*' #en général, variable ou nom de fonction

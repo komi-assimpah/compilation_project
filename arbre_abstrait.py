@@ -12,12 +12,12 @@ class Programme:
 		self.listeInstructions.afficher(indent+1)
 		afficher("</programme>",indent)
 
-class ListeInstructions:
+class ListeInstructions (list):
 	def __init__(self):
 		self.instructions = []
 	def afficher(self,indent=0):
 		afficher("<listeInstructions>",indent)
-		for instruction in self.instructions:
+		for instruction in self:
 			instruction.afficher(indent+1)
 		afficher("</listeInstructions>",indent)
 			
@@ -74,6 +74,19 @@ class Conjonction:
 		self.bool1.afficher(indent+1)
 		self.bool2.afficher(indent+1)
 		afficher("</conjonction>",indent)
+
+
+class Comparateur:
+	def __init__(self,comparateur,somme1,somme2):
+		self.somme1 = somme1
+		self.comparateur = comparateur
+		self.somme2 = somme2
+	def afficher(self,indent=0):
+		afficher("<comparateur>",indent)
+		afficher(self.comparateur,indent+1)
+		self.somme1.afficher(indent+1)
+		self.somme2.afficher(indent+1)
+		afficher("</comparateur>",indent)
 
 
 class Entier:

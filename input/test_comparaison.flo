@@ -1,0 +1,10 @@
+ecrire(2);
+ecrire(2!=5);
+ecrire(2<5);
+ecrire(2>5);
+ecrire(2<=5);
+ecrire(2>=5);
+ecrire(2==5);
+
+ecrire(2+5 < 3+8);
+ecrire(5);

@@ -15,13 +15,13 @@ class FloParser(Parser):
 	@_('instruction')
 	def listeInstructions(self, p):
 		l = arbre_abstrait.ListeInstructions()
-		l.instructions.append(p[0])
+		l.append(p.instruction)
 		return l
 					
-	@_('instruction listeInstructions')
+	@_('listeInstructions instruction')
 	def listeInstructions(self, p):
-		p[1].instructions.append(p[0])
-		return p[1]
+		p.listeInstructions.append(p.instruction)
+		return p.listeInstructions
 		
 	@_('ecrire')
 	def instruction(self, p):
@@ -82,6 +82,13 @@ class FloParser(Parser):
 		return arbre_abstrait.Conjonction(p[1], p[0], p[2])
 
 
+    #3.2 Comparateurs
+	@_('expr COMPARATEUR expr',)
+	def booleen(self, p):
+                return arbre_abstrait.Comparateur(p[1], p[0], p[2])
+
+            
+            
 
 	@_('ENTIER')
 	def facteur(self, p):

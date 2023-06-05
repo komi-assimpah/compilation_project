@@ -5,10 +5,10 @@
 #ecrire(non 6);
 
 #ecrire(a ou b);
-#ecrire(non Vrai ou Faux);
+ecrire(non Vrai ou Faux);
 
 #ecrire(non Vrai et Faux);
 
-#ecrire(Vrai et non Faux);
+ecrire(Vrai et non Faux);
 
 #ecrire( ((non Vrai) et Faux) ou (non Vrai) )
