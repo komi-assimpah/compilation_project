@@ -1,1 +1,5 @@
 ecrire(3+8*5);
+
+ecrire(12/13*13);
+ecrire(12*13/13);
+ecrire(47%20);
