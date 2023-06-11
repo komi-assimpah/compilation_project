@@ -1,0 +1,9 @@
+entier max(entier e1, entier e2){
+	entier res = 0;
+	si (e1 >= e2){
+		res = e1;
+	} sinon {
+		res = e2;
+	}
+	retourner res;
+}

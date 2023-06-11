@@ -41,8 +41,8 @@ class FloLexer(Lexer):
 	FAUX = r'Faux'
 	EGAL = r'=='
 	#AFFECTATION = r'='
-	SI = r'si'
 	SINON = r'sinon'
+	SI = r'si'
 	TANTQUE = r'tantque'
 
 
@@ -80,14 +80,12 @@ class FloLexer(Lexer):
 
     	# cas général
 	IDENTIFIANT = r'[a-zA-Z][a-zA-Z0-9_]*' #en général, variable ou nom de fonction
-	#IDENTIFIANT = r'(entier\b|booleen\b)[a-zA-Z][a-zA-Z0-9_]*'
 
 	# cas spéciaux:
 	IDENTIFIANT['ecrire'] = ECRIRE
 	IDENTIFIANT['entier'] = TYPE
 	IDENTIFIANT['booleen'] = TYPE
 	IDENTIFIANT['lire'] = LIRE
-	#IDENTIFIANT['max'] = MAX
 	IDENTIFIANT['retourner'] = RETOURNER
 	"""IDENTIFIANT['si'] = SI
 	IDENTIFIANT['sinon'] = SINON"""
