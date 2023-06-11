@@ -7,7 +7,7 @@ class TableSymboles:
     def __init__(self):
         self.symboles = {}
         
-    def verifier_exist(self, nom, type_args):
+    def exist(self, nom, type_args):
         if nom in self.symboles:
             if len(type_args) != len(self.symboles[nom]['args']):
                 return False
