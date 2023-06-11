@@ -2,14 +2,13 @@ import sys
 from analyse_lexicale import FloLexer
 from analyse_syntaxique import FloParser
 import arbre_abstrait
+from table_des_symboles import TableSymboles
 
 num_etiquette_courante = -1 #Permet de donner des noms différents à toutes les étiquettes (en les appelant e0, e1,e2,...)
 
 
-
-
-
-
+table_des_symboles = TableSymboles()
+fonction_en_cours = ""
 
 
 
@@ -60,6 +59,24 @@ def nasm_nouvelle_etiquette():
 	num_etiquette_courante+=1
 	return "e"+str(num_etiquette_courante)
 
+def code_comparaison():
+    etiquette_vrai = nasm_nouvelle_etiquette()
+    etiquette_fin = nasm_nouvelle_etiquette()
+
+nasm_instruction("cmp", "eax", "ebx", "", "")
+
+
+
+
+def nasm_instruction(opcode, op1="", op2="", op3="", comment=""):
+    if op2 == "":
+        printifm("\t" + opcode + "\t" + op1 + "\t\t", end="")
+    elif op3 == "":
+        printifm("\t" + opcode + "\t" + op1 + ",\t" + op2 + "\t", end="")
+    else:
+        printifm("\t" + opcode + "\t" + op1 +
+                 ",\t" + op2 + ",\t" + op3, end="")
+    nasm_comment(comment)
 """
 Affiche le code nasm correspondant à tout un programme
 """
