@@ -28,10 +28,6 @@ class FloParser(Parser):
 	def instruction(self, p):
 		return p[0]
 
-	"""@_('affectation')
-	def instruction(self, p):
-		return p[0]"""
-
 	@_('ECRIRE "(" expr ")" ";"')
 	def ecrire(self, p):
 		return arbre_abstrait.Ecrire(p.expr) #p.expr = p[2]
