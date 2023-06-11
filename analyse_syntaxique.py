@@ -9,9 +9,48 @@ class FloParser(Parser):
 
 	# Règles gramaticales et actions associées
 
+	@_('prog')
+	def statement(self, p):
+		return p.prog
+
 	@_('listeInstructions')
 	def prog(self, p):
-		return arbre_abstrait.Programme(p[0])
+		return arbre_abstrait.Programme(p.listeInstructions)
+
+	@_('listeFonctions')
+	def prog(self, p):
+		return arbre_abstrait.Programme(p.listeFonctions)
+
+	@_('listeFonctions listeInstructions')
+	def prog(self, p):
+		return arbre_abstrait.Programme(p.listeFonctions, p.listeInstructions)
+
+	@_('fonction_declaration_without_parm')
+	def listeFonctions(self, p):
+		l = arbre_abstrait.ListeFonctions()
+		l.append(p.fonction_declaration_without_parm)
+		return l
+
+	@_('fonction_declaration')
+	def listeFonctions(self, p):
+		l = arbre_abstrait.ListeFonctions()
+		l.append(p.fonction_declaration)
+		return l
+
+	@_('listeFonctions fonction_declaration')
+	def listeFonctions(self, p):
+		p.listeFonctions.append(p.fonction_declaration)
+		return p.listeFonctions
+
+	@_('listeFonctions fonction_declaration_without_parm')
+	def listeFonctions(self, p):
+		p.listeFonctions.append(p.fonction_declaration_without_parm)
+		return p.listeFonctions
+
+	@_('listeInstructions instruction')
+	def listeInstructions(self, p):
+		p.listeInstructions.append(p.instruction)
+		return p.listeInstructions
 
 	@_('instruction')
 	def listeInstructions(self, p):
@@ -19,12 +58,8 @@ class FloParser(Parser):
 		l.append(p.instruction)
 		return l
 
-	@_('listeInstructions instruction')
-	def listeInstructions(self, p):
-		p.listeInstructions.append(p.instruction)
-		return p.listeInstructions
 
-	@_('ecrire')
+	@_('ecrire', 'appel_fonction_instr', 'appel_fonction_instr_without_parm')
 	def instruction(self, p):
 		return p[0]
 
@@ -97,6 +132,15 @@ class FloParser(Parser):
 	@_('FAUX')
 	def booleen(self, p):
 		return arbre_abstrait.Booleen(False)
+
+	@_("expr")
+	def arg_list(self, p):
+		return [p.expr]
+
+	@_("arg_list ',' expr")
+	def arg_list(self, p):
+		p.arg_list.append(p.expr)
+		return p.arg_list
 
 
 	"""@_('IDENTIFIANT')
@@ -214,17 +258,6 @@ class FloParser(Parser):
 	def instruction(self, p):
 		return p[0]
 			
-	"""@_('IDENTIFIANT AFFECTATION expr ";"')
-	def affectation(self, p):
-		return arbre_abstrait.Affectation('=', p.IDENTIFIANT, p.expr)"""
-
-	"""@_('declaration_affectation') #Declaration_Affectation
-	def instruction(self, p):
-		return p[0]"""
-			
-	"""@_('TYPE IDENTIFIANT AFFECTATION expr ";"')
-	def declaration_affectation(self, p):
-		return arbre_abstrait.Declaration_Affectation('=', p.TYPE, p.IDENTIFIANT, p.expr) """
   
   
   
@@ -279,22 +312,81 @@ class FloParser(Parser):
 		return arbre_abstrait.Instruction_Boucle(p.expr, p.listeInstructions) 
 
 
+
+
 	@_('retourner') #Instruction retourner expression
 	def instruction(self, p):
                 return p[0]
         
-	@_('RETOURNER expr ";"') #Instruction retourner expression
+	@_('retourner')
 	def retourner(self, p):
-                return arbre_abstrait.Retourner(p.expr)
+		return p.retourner
+
+	@_('RETOURNER expr ";"')
+	def retourner(self, p):
+		return arbre_abstrait.Retourner(p.expr)
+
+	@_('IDENTIFIANT "(" arg_list ")" ";" ')
+	def appel_fonction_instr(self, p):
+		return arbre_abstrait.Appel_Fonction(p.IDENTIFIANT, p.arg_list)
+
+	@_("IDENTIFIANT '(' arg_list ')'")
+	def appel_fonction_expr(self, p):
+		return arbre_abstrait.Appel_Fonction(p.IDENTIFIANT, p.arg_list)
+
+	@_('IDENTIFIANT "(" ")" ";"')
+	def appel_fonction_instr_without_parm(self, p):
+		return arbre_abstrait.Appel_Fonction(p.IDENTIFIANT, [])
+
+	@_('IDENTIFIANT "(" ")" ')
+	def appel_fonction_expr_without_parm(self, p):
+		return arbre_abstrait.Appel_Fonction(p.IDENTIFIANT, [])
+
+	@_('TYPE IDENTIFIANT "(" param_list ")" "{" listeInstructions "}"')
+	def fonction_declaration(self, p):
+		return arbre_abstrait.Fonction(p.IDENTIFIANT, p.type, p.param_list, p.listeInstructions)
+
+	@_("TYPE IDENTIFIANT '(' ')' '{' listeInstructions '}'")
+	def fonction_declaration_without_parm(self, p):
+		return arbre_abstrait.Fonction(p.IDENTIFIANT, p.TYPE, [], p.listeInstructions)
+
+	@_("param")
+	def param_list(self, p):
+		return [p.param]
+
+	@_("param_list ',' param")
+	def param_list(self, p):
+		p.param_list.append(p.param)
+		return p.param_list
+
+	@_("TYPE IDENTIFIANT")
+	def param(self, p):
+		return arbre_abstrait.Parametre(p.TYPE, p.IDENTIFIANT)
+
+
+
+
+
         
 
-	@_('appel_fonction') #Appel de fonction
+	"""@_('appel_fonction') #Appel de fonction
 	def instruction(self, p):
-                return p[0]
+                return p[0]"""
+            
+	@_('appel_fonction_expr')
+	def facteur(self, p):
+		return p.appel_fonction_expr
 
-	@_('IDENTIFIANT "(" facteur ")" ";"') #Appel de fonction
+	@_('appel_fonction_expr_without_parm')
+	def facteur(self, p):
+		return p.appel_fonction_expr_without_parm
+
+
+
+
+	"""@_('IDENTIFIANT "(" facteur ")" ";"') #Appel de fonction
 	def appel_fonction(self, p):
-                return arbre_abstrait.Appel_Fonction(p.IDENTIFIANT)
+                return arbre_abstrait.Appel_Fonction(p.IDENTIFIANT)"""
 
 	@_('max') #Max
 	def instruction(self, p):

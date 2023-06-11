@@ -78,6 +78,7 @@ class FloLexer(Lexer):
 
     	# cas général
 	IDENTIFIANT = r'[a-zA-Z][a-zA-Z0-9_]*' #en général, variable ou nom de fonction
+	#IDENTIFIANT = r'(entier\b|booleen\b)[a-zA-Z][a-zA-Z0-9_]*'
 
 	# cas spéciaux:
 	IDENTIFIANT['ecrire'] = ECRIRE

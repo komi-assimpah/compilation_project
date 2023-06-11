@@ -5,12 +5,17 @@ def afficher(s,indent=0):
 	print(" "*indent+s)
 	
 class Programme:
-	def __init__(self,listeInstructions):
-		self.listeInstructions = listeInstructions
-	def afficher(self,indent=0):
-		afficher("<programme>",indent)
-		self.listeInstructions.afficher(indent+1)
-		afficher("</programme>",indent)
+    def __init__(self, listeFonctions=None, listeInstructions=None):
+        self.listeFonctions = listeFonctions
+        self.listeInstructions = listeInstructions
+
+    def afficher(self, indent=0):
+        afficher("<programme>", indent)
+        if self.listeFonctions:
+            self.listeFonctions.afficher(indent + 1)
+        if self.listeInstructions:
+            self.listeInstructions.afficher(indent + 1)
+        afficher("</programme>", indent)
 
 class ListeInstructions (list):
 	def __init__(self):
@@ -21,6 +26,17 @@ class ListeInstructions (list):
 			instruction.afficher(indent+1)
 		afficher("</listeInstructions>",indent)
 			
+   
+class ListeFonctions(list):
+    def __init__(self):
+        pass
+
+    def afficher(self, indent=0):
+        afficher("<listeFonctions>", indent)
+        for fonction in self:
+            fonction.afficher(indent + 1)
+        afficher("</listeFonctions>", indent)
+        
 class Ecrire:
 	def __init__(self,exp):
 		self.exp = exp
@@ -234,14 +250,40 @@ class Retourner:
 		afficher("<retourner>",indent)
 		self.exp.afficher(indent+1)
 		afficher("</retourner>",indent)
+  
+class Fonction:
+    def __init__(self, identifiant, type, param_list, liste_instructions):
+        self.identifiant = identifiant
+        self.type = type
+        self.param_list = param_list
+        self.liste_instructions = liste_instructions
+
+    def afficher(self, indent=0):
+        afficher("<fonction>", indent)
+        afficher(f"[Type: {self.type}]", indent + 1)
+        afficher(f"[Identifiant: {self.identifiant}]", indent + 1)
+        if self.param_list:
+            afficher("<parametres>", indent + 1)
+            for param in self.param_list:
+                param.afficher(indent + 2)
+            afficher("</parametres>", indent + 1)
+        self.liste_instructions.afficher(indent + 1)
+        afficher("</fonction>", indent)
 
 class Appel_Fonction:
-	def __init__(self,identif):
-		self.identif = identif
-	def afficher(self,indent=0):
-		afficher("<appel fonction>",indent)
-		self.identif.afficher(indent+1)
-		afficher("</appel fonction>",indent)
+    def __init__(self, identifiant, args):
+        self.identifiant = identifiant
+        self.args = args
+
+    def afficher(self, indent=0):
+        afficher("<appelFonction>", indent)
+        afficher(f"[Identifiant: {self.identifiant}]", indent + 1)
+        if self.args:
+            afficher("<arguments>", indent + 1)
+            for arg in self.args:
+                arg.afficher(indent + 2)
+            afficher("</arguments>", indent + 1)
+        afficher("</appelFonction>", indent)
 
 class Max:
 	def __init__(self,exp):
@@ -251,3 +293,14 @@ class Max:
 		self.exp.afficher(indent+1)
 		afficher("</max>",indent)
 
+
+class Parametre:
+    def __init__(self, type, identifiant):
+        self.type = type
+        self.identifiant = identifiant
+
+    def afficher(self, indent=0):
+        afficher("<parametre>", indent)
+        afficher(f"[Identifiant: {self.identifiant}]", indent + 1)
+        afficher(f"[Type: {self.type}]", indent + 1)
+        afficher("</parametre>", indent)
