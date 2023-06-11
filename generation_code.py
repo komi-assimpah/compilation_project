@@ -59,13 +59,31 @@ def nasm_nouvelle_etiquette():
 	num_etiquette_courante+=1
 	return "e"+str(num_etiquette_courante)
 
+######################################################
 def code_comparaison():
+    nasm_instruction("cmp", "eax", "ebx", "", "")
     etiquette_vrai = nasm_nouvelle_etiquette()
     etiquette_fin = nasm_nouvelle_etiquette()
 
-nasm_instruction("cmp", "eax", "ebx", "", "")
-
-
+	if operateur == "==":
+		nasm_instruction("je", etiquette_vrai, "", "", "")
+	elif operateur == "!=":
+		nasm_instruction("jne", etiquette_vrai, "", "", "")
+	elif operateur == "<":
+		nasm_instruction("jl", etiquette_vrai, "", "", "")
+	elif operateur == ">":
+		nasm_instruction("jg", etiquette_vrai, "", "", "")
+	elif operateur == "<=":
+	nasm_instruction("jle", etiquette_vrai, "", "", "")
+		elif operateur == ">=":
+	nasm_instruction("jge", etiquette_vrai, "", "", "")
+ 
+    nasm_instruction("push", "0", "", "", "")  # Mettre la valeur 0 sur la pile (faux)
+    nasm_instruction("jmp", etiquette_fin, "", "", "")
+    nasm_instruction(etiquette_vrai + ":")
+    nasm_instruction("push", "1", "", "", "")  # Mettre la valeur 1 sur la pile (vrai)
+    nasm_instruction(etiquette_fin + ":")
+######################################################
 
 
 def nasm_instruction(opcode, op1="", op2="", op3="", comment=""):
@@ -103,11 +121,21 @@ def gen_listeInstructions(listeInstructions):
 Affiche le code nasm correspondant à une instruction
 """
 def gen_instruction(instruction):
-	if type(instruction) == arbre_abstrait.Ecrire:
-		gen_ecrire(instruction)
-	else:
-		print("type instruction inconnu",type(instruction))
-		exit(0)
+    if type(instruction) == arbre_abstrait.Ecrire:
+        gen_ecrire(instruction)
+    elif type(instruction) == arbre_abstrait.Lire:
+        gen_lire(instruction)
+    elif type(instruction) == arbre_abstrait.TantQue:
+        gen_tantque(instruction)
+    elif type(instruction) == arbre_abstrait.Condition:
+        gen_si(instruction)
+    elif type(instruction) == arbre_abstrait.Retourner:
+        gen_retourner(instruction)
+    elif type(instruction) == arbre_abstrait.AppelFonction:
+        gen_appel_fct(instruction)
+    else:
+        print("type instruction inconnu ", type(instruction))
+        exit(0)
 
 """
 Affiche le code nasm correspondant au fait d'envoyer la valeur entière d'une expression sur la sortie standard
@@ -117,6 +145,16 @@ def gen_ecrire(ecrire):
 	nasm_instruction("pop", "eax", "", "", "") #on dépile la valeur d'expression sur eax
 	nasm_instruction("call", "iprintLF", "", "", "") #on envoie la valeur d'eax sur la sortie standard
 
+
+def gen_lire(ecrire):
+    # charge l’adresse sinput dans eax
+    nasm_instruction("mov", "eax", "sinput", "", "")
+    # copie l’entrée utilisateur à l’adresse indiquée dans eax
+    nasm_instruction("call", "readline", "", "", "")
+    nasm_instruction("call", "atoi", "", "",
+                     "")  # transforme la chaîne de caractère à l’adresse indiquée dans eax en entier et met le résultat dans eax
+    nasm_instruction("push", "eax", "", "", "")  # empile eax.
+
 """
 Affiche le code nasm pour calculer et empiler la valeur d'une expression
 """
@@ -125,9 +163,21 @@ def gen_expression(expression):
 		gen_operation(expression) #on calcule et empile la valeur de l'opération
 	elif type(expression) == arbre_abstrait.Entier:
       		nasm_instruction("push", str(expression.valeur), "", "", "") ; #on met sur la pile la valeur entière			
-	else:
-		print("type d'expression inconnu",type(expression))
-		exit(0)
+
+	elif type(expression) == arbre_abstrait.Booleen:
+		if str(expression.valeur) == "Vrai":
+			nasm_instruction("push", "1", "", "", "")
+			return arbre_abstrait.Booleen  # on met sur la pile la valeur booléenne
+		elif str(expression.valeur) == "Faux":
+			nasm_instruction("push", "0", "", "", "")
+			return arbre_abstrait.Booleen
+	elif type(expression) == arbre_abstrait.AppelFonction:
+		retour=gen_appel_fct(expression)
+		nasm_instruction("push", "eax", "", "", "")
+		return retour
+    else:
+        print("type d'expression inconnu", type(expression))
+        exit(0)
 
 
 """
