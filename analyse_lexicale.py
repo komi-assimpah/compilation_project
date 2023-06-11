@@ -3,6 +3,7 @@ from sly import Lexer
 
 class FloLexer(Lexer):
 	# Noms des lexèmes (sauf les litéraux). En majuscule. Ordre non important
+
 	tokens = {IDENTIFIANT, ENTIER, BOOLEEN, ECRIRE,
            		   INFERIEUR, INFERIEUR_OU_EGAL,
                    EGAL, PAS_EGAL,
@@ -16,11 +17,12 @@ class FloLexer(Lexer):
                    TYPE
             }
 
+
 	#Les caractères litéraux sont des caractères uniques qui sont retournés tel quel quand rencontré par l'analyse lexicale.
 	#Les litéraux sont vérifiés en dernier, après toutes les autres règles définies par des expressions régulières.
 	#Donc, si une règle commence par un de ces littérals (comme INFERIEUR_OU_EGAL), cette règle aura la priorité.
-	literals = { '+','*','(',')',';', '-', '%', '/', '{', '}', '!', ',', '&', '='}
 
+	literals = { '+','*','(',')',';', '-', '%', '/', '{', '}', '!', ',', '&', '='}
 
 
 
@@ -28,6 +30,7 @@ class FloLexer(Lexer):
 	ignore = ' \t'
 
 	# Expressions régulières correspondant au différents Lexèmes par ordre de priorité
+
 
 	NON= r'non'
 	OU= r'ou'
@@ -55,8 +58,6 @@ class FloLexer(Lexer):
 		t.value = int(t.value)
 		return t
 
-
-
 # Règle pour les booléens
 	@_(VRAI)
 	def VRAI(self, t):
@@ -68,18 +69,25 @@ class FloLexer(Lexer):
 		t.value = False
 		return t
 
+
 	@_(r'<=|>=|<|>|==|!=')
 	def COMPARATEUR(self, t):
 		return t
 
-    # cas général
+    	# cas général
 	IDENTIFIANT = r'[a-zA-Z][a-zA-Z0-9_]*' #en général, variable ou nom de fonction
 
 	# cas spéciaux:
 	IDENTIFIANT['ecrire'] = ECRIRE
 	IDENTIFIANT['entier'] = TYPE
 	IDENTIFIANT['booleen'] = TYPE
-
+	IDENTIFIANT['lire'] = LIRE
+	IDENTIFIANT['max'] = MAX
+	IDENTIFIANT['retourner'] = RETOURNER
+	IDENTIFIANT['sinon_si'] = SINON_SI
+	IDENTIFIANT['si'] = SI
+	IDENTIFIANT['sinon'] = SINON
+	IDENTIFIANT['tantque'] = TANTQUE
 
 	#Syntaxe des commentaires à ignorer
 	ignore_comment = r'\#.*'

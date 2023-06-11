@@ -8,6 +8,7 @@ class FloParser(Parser):
 	tokens = FloLexer.tokens
 
 	# Règles gramaticales et actions associées
+
 	@_('listeInstructions')
 	def prog(self, p):
 		return arbre_abstrait.Programme(p[0])
@@ -56,15 +57,17 @@ class FloParser(Parser):
 	def produit(self, p):
             return arbre_abstrait.Operation('*', p[0], p[2])
 
+
+                
 	@_('produit "/" facteur')
 	def produit(self, p):
-            return arbre_abstrait.Operation('/', p[0], p[2])
-
+                return arbre_abstrait.Operation('/',p[0],p[2])
+                
 	@_('produit "%" facteur')
 	def produit(self, p):
-            return arbre_abstrait.Operation('%', p[0], p[2])
+                return arbre_abstrait.Operation('%',p[0],p[2])
 
-	@_('"-" expr')
+	@_('"-" facteur')
 	def produit(self, p):
             return arbre_abstrait.Operation('*', arbre_abstrait.Entier(-1), p[1])
 
@@ -114,10 +117,11 @@ class FloParser(Parser):
 	@_('TYPE IDENTIFIANT AFFECTATION expr ";"')
 	def declaration_affectation(self, p):
 		return arbre_abstrait.Declaration_Affectation('=', p.TYPE, p.IDENTIFIANT, p.expr)
+=
 
 	@_('ENTIER')
 	def facteur(self, p):
-		return arbre_abstrait.Entier(p.ENTIER) #p.ENTIER = p[0]
+		return arbre_abstrait.Entier(p.ENTIER)
 
 	@_('BOOLEEN')
 	def facteur(self, p):
@@ -165,9 +169,37 @@ class FloParser(Parser):
 	def facteur(self, p):
 		return p.variable
 
+
 	@_('"(" expr ")"')
+	def expr(self, p):
+		return p.expr #ou p[1]
+
+	#2.3 Autres Factuers
+	
+	@_('IDENTIFIANT AFFECTATION ENTIER') #facteur nomVariable
 	def facteur(self, p):
-		return p[1]
+		return arbre_abstrait.Nom_Variable('=', p.IDENTIFIANT, p.ENTIER)
+	
+	@_('nomFonction') #facteur nomFonction
+	def facteur(self, p):
+                return p[0]
+
+	@_('IDENTIFIANT "(" facteur ")"')
+	def nomFonction(self, p):
+                return arbre_abstrait.Nom_Fonction(p.factuer)
+
+	@_('lire') #facteur lire()
+	def facteur(self, p):
+		return p[0]
+	
+	@_('LIRE "(" expr ")"')
+	def lire(self, p):
+		return arbre_abstrait.Lire(p.expr)
+
+			
+	#3. Expressions Booléennes
+
+	#3.1 Problème de Type
 
 	@_('booleen')
 	def expr(self, p):
@@ -175,17 +207,174 @@ class FloParser(Parser):
 
 	@_('somme')
 	def booleen(self, p):
-		return p.somme
+        return p.somme
 
+	@_('VRAI')
+	def booleen(self, p):
+                return arbre_abstrait.Vrai(p.VRAI)
 
+	@_('FAUX')
+	def booleen(self, p):
+                return arbre_abstrait.Faux(p.FAUX)
+        
+	@_('produit')
+	def somme(self, p):
+                return p.produit
+        
+	@_('somme "+" produit')
+	def somme(self, p):
+                return arbre_abstrait.Operation('+',p[0],p[2])
 
-	"""@_('lire()')
+	@_('somme "-" produit') #duplicate
+	def somme(self, p):
+                return arbre_abstrait.Operation('-',p[0],p[2])
+
+	@_('facteur') #duplicate
+	def produit(self, p):
+                return p.facteur	        
+
+	@_('produit "*" facteur') #duplicate
+	def produit(self, p):
+                return arbre_abstrait.Operation('*',p[0],p[2])
+                
+	@_('variable')
 	def facteur(self, p):
-		return arbre_abstrait.Entier(p.lire())"""
+                return p.variable
 
-	"""@_('nomFonction')
-	def facteur(self, p):
-		return arbre_abstrait.Entier(p.nomFonction)	"""
+	@_('IDENTIFIANT')
+	def variable(self, p):
+                return arbre_abstrait.Identifiant(p.IDENTIFIANT)
+
+
+        #3.2 Comparateurs
+
+	@_('somme EGAL somme')
+	def booleen(self, p):
+                return arbre_abstrait.Comparateur('==', p[0], p[2])
+
+	@_('somme PAS_EGAL somme')
+	def booleen(self, p):
+                return arbre_abstrait.Comparateur('!=', p[0], p[2])
+
+	@_('somme INFERIEUR somme')
+	def booleen(self, p):
+                return arbre_abstrait.Comparateur('<', p[0], p[2])
+
+	@_('somme INFERIEUR_OU_EGAL somme')
+	def booleen(self, p):
+                return arbre_abstrait.Comparateur('<=', p[0], p[2])
+
+	@_('somme SUPERIEUR somme')
+	def booleen(self, p):
+                return arbre_abstrait.Comparateur('>', p[0], p[2])
+
+	@_('somme SUPERIEUR_OU_EGAL somme')
+	def booleen(self, p):
+                return arbre_abstrait.Comparateur('>=', p[0], p[2])
+
+	
+	#3.3 Operarteurs Logiques
+
+	@_('NON booleen')
+	def booleen(self, p):
+                return arbre_abstrait.Negation('non', p.booleen)
+
+	@_('somme OU produit')
+	def booleen(self, p):
+                return arbre_abstrait.Conjonction('ou', p.somme, p.produit)
+
+	@_('somme ET produit')
+	def booleen(self, p):
+                return arbre_abstrait.Conjonction('et', p.somme, p.produit)
+
+
+        #4 Autres Instructions
+
+
+	@_('declaration') #Declaration
+	def instruction(self, p):
+		return p[0]
+			
+	@_('TYPE IDENTIFIANT ";"')
+	def declaration(self, p):
+		return arbre_abstrait.Declaration(p.TYPE, p.IDENTIFIANT)
+
+	@_('affectation') #Affectation
+	def instruction(self, p):
+		return p[0]
+			
+	@_('IDENTIFIANT AFFECTATION expr ";"')
+	def affectation(self, p):
+		return arbre_abstrait.Affectation('=', p.IDENTIFIANT, p.expr)
+
+	@_('declaration_affectation') #Declaration_Affectation
+	def instruction(self, p):
+		return p[0]
+			
+	@_('TYPE IDENTIFIANT AFFECTATION expr ";"')
+	def declaration_affectation(self, p):
+		return arbre_abstrait.Declaration_Affectation('=', p.TYPE, p.IDENTIFIANT, p.expr) 
+
+	@_('si') #SI
+	def instruction(self, p):
+		return p[0]
+			
+	@_('SI "(" expr ")" "{" listeInstructions "}"')
+	def si(self, p):
+		return arbre_abstrait.Si(p.expr, p.listeInstructions) 
+
+	@_('sinon_si') #SINON_SI
+	def instruction(self, p):
+		return p[0]
+			
+	@_('SINON_SI "(" expr ")" "{" listeInstructions "}"')
+	def sinon_si(self, p):
+		return arbre_abstrait.Sinon_Si(p.expr, p.listeInstructions) 
+
+	@_('sinon') #SINON 
+	def instruction(self, p):
+		return p[0]
+			
+	@_('SINON "{" listeInstructions "}"')
+	def sinon(self, p):
+		return arbre_abstrait.Sinon(p.listeInstructions)
+
+	@_('tantque') #TANTEQUE 
+	def instruction(self, p):
+		return p[0]
+			
+	@_('TANTQUE "(" expr ")" "{" listeInstructions "}"')
+	def tantque(self, p):
+		return arbre_abstrait.Instruction_Boucle(p.expr, p.listeInstructions) 
+
+
+	@_('retourner') #Instruction retourner expression
+	def instruction(self, p):
+                return p[0]
+        
+	@_('RETOURNER expr ";"') #Instruction retourner expression
+	def retourner(self, p):
+                return arbre_abstrait.Retourner(p.expr)
+        
+
+	@_('appel_fonction') #Appel de fonction
+	def instruction(self, p):
+                return p[0]
+
+	@_('IDENTIFIANT "(" facteur ")" ";"') #Appel de fonction
+	def appel_fonction(self, p):
+                return arbre_abstrait.Appel_Fonction(p.IDENTIFIANT)
+
+	@_('max') #Max
+	def instruction(self, p):
+                return p[0]
+        
+	@_('MAX "(" expr ")" ";"') #Max
+	def max(self, p):
+                return arbre_abstrait.Max(p.expr)
+        
+
+
 
 if __name__ == '__main__':
 	lexer = FloLexer()
