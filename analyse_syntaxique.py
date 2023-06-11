@@ -71,53 +71,14 @@ class FloParser(Parser):
 	def produit(self, p):
             return arbre_abstrait.Operation('*', arbre_abstrait.Entier(-1), p[1])
 
-	#3.3 Operarteurs Logiques
-	@_('NON booleen')
-	def booleen(self, p):
-		return arbre_abstrait.Negation('non', p.booleen)
-
-	@_('expr OU expr')
-	def booleen(self, p):
-		return arbre_abstrait.Disjonction(p[1], p[0], p[2])
-
-	@_('expr ET expr')
-	def booleen(self, p):
-		return arbre_abstrait.Conjonction(p[1], p[0], p[2])
-
-
-    #3.2 Comparateurs
-	@_('expr COMPARATEUR expr',)
-	def booleen(self, p):
-                return arbre_abstrait.Comparateur(p[1], p[0], p[2])
 
 
 
-    #4 Autres Instructions
 
-	@_('declaration') #Declaration
-	def instruction(self, p):
-		return p[0]
 
-	@_('TYPE IDENTIFIANT ";"')
-	def declaration(self, p):
-		return arbre_abstrait.Declaration(p.TYPE, p.IDENTIFIANT)
 
-	@_('affectation') #Affectation
-	def instruction(self, p):
-		return p[0]
 
-	@_('IDENTIFIANT AFFECTATION expr ";"')
-	def affectation(self, p):
-		return arbre_abstrait.Affectation('=', p.IDENTIFIANT, p.expr)
 
-	@_('declaration_affectation') #Declaration_Affectation
-	def instruction(self, p):
-		return p[0]
-
-	@_('TYPE IDENTIFIANT AFFECTATION expr ";"')
-	def declaration_affectation(self, p):
-		return arbre_abstrait.Declaration_Affectation('=', p.TYPE, p.IDENTIFIANT, p.expr)
-=
 
 	@_('ENTIER')
 	def facteur(self, p):
@@ -140,24 +101,14 @@ class FloParser(Parser):
 	def facteur(self, p):
 		return arbre_abstrait.Identifiant(p.IDENTIFIANT)"""
 
-	#edit
-	@_('IDENTIFIANT')
-	def variable(self, p):
-		return arbre_abstrait.Identifiant(p.IDENTIFIANT)
+	
 
-
-	"""@_('IDENTIFIANT "=" expr ";"')
-	def affectation(self, p):
-		return arbre_abstrait.Affectation(p.IDENTIFIANT, p.expr)"""
 
 	@_('produit')
 	def expr(self, p):
             return p.produit
 
-    #edit
-	@_('produit')
-	def somme(self, p):
-		return p.produit
+
 
 
 
@@ -165,9 +116,6 @@ class FloParser(Parser):
 	def produit(self, p):
 		return p.facteur
 
-	@_('variable')
-	def facteur(self, p):
-		return p.variable
 
 
 	@_('"(" expr ")"')
@@ -207,89 +155,52 @@ class FloParser(Parser):
 
 	@_('somme')
 	def booleen(self, p):
-        return p.somme
+		return p.somme
 
-	@_('VRAI')
-	def booleen(self, p):
-                return arbre_abstrait.Vrai(p.VRAI)
-
-	@_('FAUX')
-	def booleen(self, p):
-                return arbre_abstrait.Faux(p.FAUX)
-        
+    #edit
 	@_('produit')
 	def somme(self, p):
                 return p.produit
         
-	@_('somme "+" produit')
-	def somme(self, p):
-                return arbre_abstrait.Operation('+',p[0],p[2])
 
 	@_('somme "-" produit') #duplicate
 	def somme(self, p):
                 return arbre_abstrait.Operation('-',p[0],p[2])
 
-	@_('facteur') #duplicate
-	def produit(self, p):
-                return p.facteur	        
+        
 
-	@_('produit "*" facteur') #duplicate
-	def produit(self, p):
-                return arbre_abstrait.Operation('*',p[0],p[2])
                 
 	@_('variable')
 	def facteur(self, p):
                 return p.variable
 
+	#edit
 	@_('IDENTIFIANT')
 	def variable(self, p):
                 return arbre_abstrait.Identifiant(p.IDENTIFIANT)
 
-
-        #3.2 Comparateurs
-
-	@_('somme EGAL somme')
+    #3.2 Comparateurs
+	@_('expr COMPARATEUR expr',)
 	def booleen(self, p):
-                return arbre_abstrait.Comparateur('==', p[0], p[2])
-
-	@_('somme PAS_EGAL somme')
-	def booleen(self, p):
-                return arbre_abstrait.Comparateur('!=', p[0], p[2])
-
-	@_('somme INFERIEUR somme')
-	def booleen(self, p):
-                return arbre_abstrait.Comparateur('<', p[0], p[2])
-
-	@_('somme INFERIEUR_OU_EGAL somme')
-	def booleen(self, p):
-                return arbre_abstrait.Comparateur('<=', p[0], p[2])
-
-	@_('somme SUPERIEUR somme')
-	def booleen(self, p):
-                return arbre_abstrait.Comparateur('>', p[0], p[2])
-
-	@_('somme SUPERIEUR_OU_EGAL somme')
-	def booleen(self, p):
-                return arbre_abstrait.Comparateur('>=', p[0], p[2])
+                return arbre_abstrait.Comparateur(p[1], p[0], p[2])
 
 	
-	#3.3 Operarteurs Logiques
-
+	#3.3 Operateurs Logiques
 	@_('NON booleen')
 	def booleen(self, p):
-                return arbre_abstrait.Negation('non', p.booleen)
+		return arbre_abstrait.Negation('non', p.booleen)
 
-	@_('somme OU produit')
+	@_('expr OU expr')
 	def booleen(self, p):
-                return arbre_abstrait.Conjonction('ou', p.somme, p.produit)
+		return arbre_abstrait.Disjonction(p[1], p[0], p[2])
 
-	@_('somme ET produit')
+	@_('expr ET expr')
 	def booleen(self, p):
-                return arbre_abstrait.Conjonction('et', p.somme, p.produit)
+		return arbre_abstrait.Conjonction(p[1], p[0], p[2])
 
 
-        #4 Autres Instructions
-
+    
+    #4 Autres Instructions
 
 	@_('declaration') #Declaration
 	def instruction(self, p):
