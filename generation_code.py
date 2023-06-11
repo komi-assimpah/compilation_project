@@ -5,6 +5,14 @@ import arbre_abstrait
 
 num_etiquette_courante = -1 #Permet de donner des noms différents à toutes les étiquettes (en les appelant e0, e1,e2,...)
 
+
+
+
+
+
+
+
+
 afficher_table = False
 afficher_nasm = False
 """
