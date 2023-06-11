@@ -188,7 +188,10 @@ class FloParser(Parser):
 	def booleen(self, p):
                 return arbre_abstrait.Comparateur(p[1], p[0], p[2])
 
-	
+	@_('somme EGAL somme')
+	def booleen(self, p):
+				return arbre_abstrait.Comparateur('==', p[0], p[2])
+            
 	#3.3 Operateurs Logiques
 	@_('NON booleen')
 	def booleen(self, p):

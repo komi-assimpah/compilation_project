@@ -37,7 +37,9 @@ class FloLexer(Lexer):
 	ET= r'et'
 	VRAI = r'Vrai'
 	FAUX = r'Faux'
+	EGAL = r'=='
 	AFFECTATION = r'='
+
 
 
 	"""-----------------------------
@@ -70,7 +72,7 @@ class FloLexer(Lexer):
 		return t
 
 
-	@_(r'<=|>=|<|>|==|!=')
+	@_(r'<=|>=|<|>|!=')
 	def COMPARATEUR(self, t):
 		return t
 
