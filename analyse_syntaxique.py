@@ -16,23 +16,35 @@ class FloParser(Parser):
 	@_('instruction')
 	def listeInstructions(self, p):
 		l = arbre_abstrait.ListeInstructions()
-		l.instructions.append(p[0])
+		l.append(p.instruction)
 		return l
-					
-	@_('instruction listeInstructions')
+
+	@_('listeInstructions instruction')
 	def listeInstructions(self, p):
-		p[1].instructions.append(p[0])
-		return p[1]
-		
+		p.listeInstructions.append(p.instruction)
+		return p.listeInstructions
+
 	@_('ecrire')
 	def instruction(self, p):
 		return p[0]
-			
+
+
 	@_('ECRIRE "(" expr ")" ";"')
 	def ecrire(self, p):
 		return arbre_abstrait.Ecrire(p.expr) #p.expr = p[2]
 
-                
+	@_('somme "+" produit')
+	def somme(self, p):
+		return arbre_abstrait.Operation('+',p[0],p[2])
+
+	@_('somme "-" produit') #duplicate
+	def somme(self, p):
+		return arbre_abstrait.Operation('-',p[0],p[2])
+
+	@_('produit "*" facteur')
+	def produit(self, p):
+            return arbre_abstrait.Operation('*', p[0], p[2])
+       
 	@_('produit "/" facteur')
 	def produit(self, p):
                 return arbre_abstrait.Operation('/',p[0],p[2])
@@ -52,6 +64,18 @@ class FloParser(Parser):
 	@_('BOOLEEN')
 	def facteur(self, p):
 		return arbre_abstrait.Booleen(p.BOOLEEN)
+
+	@_('VRAI')
+	def booleen(self, p):
+		return arbre_abstrait.Booleen(True)
+
+	@_('FAUX')
+	def booleen(self, p):
+		return arbre_abstrait.Booleen(False)
+	
+	@_('facteur')
+	def produit(self, p):
+		return p.facteur
 
 	@_('"(" expr ")"')
 	def expr(self, p):
@@ -90,35 +114,11 @@ class FloParser(Parser):
 
 	@_('somme')
 	def booleen(self, p):
-                return p.somme
+		return p.somme
 
-	@_('VRAI')
-	def booleen(self, p):
-                return arbre_abstrait.Vrai(p.VRAI)
-
-	@_('FAUX')
-	def booleen(self, p):
-                return arbre_abstrait.Faux(p.FAUX)
-        
 	@_('produit')
 	def somme(self, p):
                 return p.produit
-        
-	@_('somme "+" produit')
-	def somme(self, p):
-                return arbre_abstrait.Operation('+',p[0],p[2])
-
-	@_('somme "-" produit') #duplicate
-	def somme(self, p):
-                return arbre_abstrait.Operation('-',p[0],p[2])
-
-	@_('facteur') #duplicate
-	def produit(self, p):
-                return p.facteur	        
-
-	@_('produit "*" facteur') #duplicate
-	def produit(self, p):
-                return arbre_abstrait.Operation('*',p[0],p[2])
                 
 	@_('variable')
 	def facteur(self, p):
@@ -128,51 +128,31 @@ class FloParser(Parser):
 	def variable(self, p):
                 return arbre_abstrait.Identifiant(p.IDENTIFIANT)
 
-
-        #3.2 Comparateurs
+    #3.2 Comparateurs
+	@_('somme COMPARATEUR somme',)
+	def booleen(self, p):
+                return arbre_abstrait.Comparateur(p[1], p[0], p[2])
 
 	@_('somme EGAL somme')
 	def booleen(self, p):
-                return arbre_abstrait.Comparateur('==', p[0], p[2])
-
-	@_('somme PAS_EGAL somme')
-	def booleen(self, p):
-                return arbre_abstrait.Comparateur('!=', p[0], p[2])
-
-	@_('somme INFERIEUR somme')
-	def booleen(self, p):
-                return arbre_abstrait.Comparateur('<', p[0], p[2])
-
-	@_('somme INFERIEUR_OU_EGAL somme')
-	def booleen(self, p):
-                return arbre_abstrait.Comparateur('<=', p[0], p[2])
-
-	@_('somme SUPERIEUR somme')
-	def booleen(self, p):
-                return arbre_abstrait.Comparateur('>', p[0], p[2])
-
-	@_('somme SUPERIEUR_OU_EGAL somme')
-	def booleen(self, p):
-                return arbre_abstrait.Comparateur('>=', p[0], p[2])
-
-	
-	#3.3 Operarteurs Logiques
-
+				return arbre_abstrait.Comparateur('==', p[0], p[2])
+            
+	#3.3 Operateurs Logiques
 	@_('NON booleen')
 	def booleen(self, p):
-                return arbre_abstrait.Negation('non', p.booleen)
+		return arbre_abstrait.Negation('non', p.booleen)
 
-	@_('somme OU produit')
+	@_('somme OU somme')
 	def booleen(self, p):
-                return arbre_abstrait.Conjonction('ou', p.somme, p.produit)
+		return arbre_abstrait.Disjonction(p[1], p[0], p[2])
 
-	@_('somme ET produit')
+	@_('somme ET somme')
 	def booleen(self, p):
-                return arbre_abstrait.Conjonction('et', p.somme, p.produit)
+		return arbre_abstrait.Conjonction(p[1], p[0], p[2])
 
 
-        #4 Autres Instructions
-
+    
+    #4 Autres Instructions
 
 	@_('declaration') #Declaration
 	def instruction(self, p):
