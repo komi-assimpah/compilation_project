@@ -264,20 +264,20 @@ class FloParser(Parser):
 	def instruction(self, p):
 		return p[0]
 
-	@_('SI "(" expr ")" "{" listeInstructions "}" suite_sinosi')
+	@_('SI "(" expr ")" "{" listeInstructions "}" suite_sinonsi')
 	def condition(self, p):
-		return arbre_abstrait.Condition(p.expr, p.listeInstructions, p.suite_sinosi)
+		return arbre_abstrait.Condition(p.expr, p.listeInstructions, p.suite_sinonsi)
 
 	@_('SINON "{" listeInstructions "}"')
-	def suite_sinosi(self, p):
+	def suite_sinonsi(self, p):
 		return p.listeInstructions
 
-	@_('SINON SI "(" expr ")" "{" listeInstructions "}" suite_sinosi')
-	def suite_sinosi(self, p):
-		return arbre_abstrait.Condition(p.expr, p.listeInstructions, p.suite_sinosi)
+	@_('SINON SI "(" expr ")" "{" listeInstructions "}" suite_sinonsi')
+	def suite_sinonsi(self, p):
+		return arbre_abstrait.Condition(p.expr, p.listeInstructions, p.suite_sinonsi)
 
 	@_('')
-	def suite_sinosi(self, p):
+	def suite_sinonsi(self, p):
 		return None
 
 	@_('TANTQUE "(" expr ")" "{" listeInstructions "}"')

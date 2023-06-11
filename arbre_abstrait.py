@@ -233,10 +233,10 @@ class Sinon_Si:
 		afficher("</sinon>",indent)"""
   
 class Condition:
-	def __init__(self, expression, liste_instructions_vrai, suite_sinosi):
+	def __init__(self, expression, liste_instructions_vrai, suite_sinonsi):
 		self.expression = expression
 		self.liste_instructions_vrai = liste_instructions_vrai
-		self.suite_sinosi = suite_sinosi
+		self.suite_sinonsi = suite_sinonsi
 
 	def afficher(self, indent=0):
 		afficher("<condition>", indent)
@@ -245,26 +245,26 @@ class Condition:
 		afficher("<alors>", indent)
 		self.liste_instructions_vrai.afficher(indent + 1)
 		afficher("</alors>", indent)
-		if self.suite_sinosi:
-			if isinstance(self.suite_sinosi, Condition):
+		if self.suite_sinonsi:
+			if isinstance(self.suite_sinonsi, Condition):
 				afficher("<sinon>", indent)
-				self.suite_sinosi.afficher(indent + 1)
+				self.suite_sinonsi.afficher(indent + 1)
 				afficher("</sinon>", indent)
 			else:
 				afficher("<sinon>", indent)
-				self.suite_sinosi.afficher(indent + 1)
+				self.suite_sinonsi.afficher(indent + 1)
 				afficher("</sinon>", indent)
 		afficher("</condition>", indent)
 		
 class TantQue:
 	def __init__(self,expr,liste):
 		self.expr = expr
-		self.liste_instructions = liste_instructions
+		self.liste = liste
 
 	def afficher(self, indent=0):
 		afficher("<tantque>", indent)
-		self.expression.afficher(indent + 1)
-		self.liste_instructions.afficher(indent + 1)
+		self.expr.afficher(indent + 1)
+		self.liste.afficher(indent + 1)
 		afficher("</tantque>", indent)
 
 
