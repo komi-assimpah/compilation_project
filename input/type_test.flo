@@ -1,3 +1,5 @@
 entier a = 10;
 a = 20;
 ecrire(a);
+
+booleen a =Vrai;
