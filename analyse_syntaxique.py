@@ -126,9 +126,9 @@ class FloParser(Parser):
 
 	#2.3 Autres Factuers
 	
-	@_('IDENTIFIANT AFFECTATION ENTIER') #facteur nomVariable
+	"""@_('IDENTIFIANT AFFECTATION ENTIER') #facteur nomVariable
 	def facteur(self, p):
-		return arbre_abstrait.Nom_Variable('=', p.IDENTIFIANT, p.ENTIER)
+		return arbre_abstrait.Nom_Variable('=', p.IDENTIFIANT, p.ENTIER)"""
 	
 	@_('nomFonction') #facteur nomFonction
 	def facteur(self, p):
@@ -209,25 +209,42 @@ class FloParser(Parser):
 	def instruction(self, p):
 		return p[0]
 			
-	@_('TYPE IDENTIFIANT ";"')
-	def declaration(self, p):
-		return arbre_abstrait.Declaration(p.TYPE, p.IDENTIFIANT)
 
 	@_('affectation') #Affectation
 	def instruction(self, p):
 		return p[0]
 			
-	@_('IDENTIFIANT AFFECTATION expr ";"')
+	"""@_('IDENTIFIANT AFFECTATION expr ";"')
 	def affectation(self, p):
-		return arbre_abstrait.Affectation('=', p.IDENTIFIANT, p.expr)
+		return arbre_abstrait.Affectation('=', p.IDENTIFIANT, p.expr)"""
 
-	@_('declaration_affectation') #Declaration_Affectation
+	"""@_('declaration_affectation') #Declaration_Affectation
 	def instruction(self, p):
-		return p[0]
+		return p[0]"""
 			
-	@_('TYPE IDENTIFIANT AFFECTATION expr ";"')
+	"""@_('TYPE IDENTIFIANT AFFECTATION expr ";"')
 	def declaration_affectation(self, p):
-		return arbre_abstrait.Declaration_Affectation('=', p.TYPE, p.IDENTIFIANT, p.expr) 
+		return arbre_abstrait.Declaration_Affectation('=', p.TYPE, p.IDENTIFIANT, p.expr) """
+  
+  
+  
+  
+	@_('TYPE IDENTIFIANT "=" expr ";"')
+	def declaration(self, p):
+		return arbre_abstrait.Declaration(p.IDENTIFIANT, p.expr, p.TYPE)
+
+	@_('TYPE IDENTIFIANT ";"')
+	def declaration(self, p):
+		return arbre_abstrait.Declaration(p.IDENTIFIANT, None, p.TYPE)
+
+	@_('IDENTIFIANT "=" expr ";"')
+	def affectation(self, p):
+		return arbre_abstrait.Affectation(p.IDENTIFIANT, p.expr)
+
+
+
+
+
 
 	@_('si') #SI
 	def instruction(self, p):

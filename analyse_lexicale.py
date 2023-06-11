@@ -13,7 +13,7 @@ class FloLexer(Lexer):
                    VRAI, FAUX,
                    NON, ET, OU,
                    COMPARATEUR,
-                   AFFECTATION,
+                   #AFFECTATION,
                    TYPE
             }
 
@@ -38,7 +38,7 @@ class FloLexer(Lexer):
 	VRAI = r'Vrai'
 	FAUX = r'Faux'
 	EGAL = r'=='
-	AFFECTATION = r'='
+	#AFFECTATION = r'='
 
 
 

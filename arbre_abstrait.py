@@ -136,23 +136,8 @@ class Nom_Variable:
         afficher("[nomVariable: "+str(self.nom_v)+ " " + str(self.affectation) + " " +
                  str(self.valeur) +"]", indent)       
         
-class Declaration:
-        def __init__(self, type1, identif):
-                self.type1 = type1
-                self.identif = identif
-        def afficher(self, indent=0):
-                afficher("[Declaration: " + str(self.type1) + " " + str(self.identif) +"]", indent)
-                         
-class Affectation:
-        def __init__(self, identif, affectation, expr):
-                self.identif = identif
-                self.affectation = affectation
-                self.expr = expr
-        def afficher(self, indent=0):
-                afficher("[Affectation: "+str(self.identif)+ " " + str(self.affectation) + " " +
-                         str(self.expr) +"]", indent)
-        
-class Declaration_Affectation:
+
+"""class Declaration_Affectation:
         def __init__(self, affectation, type1, identif, expr):
                 self.type1 = type1
                 self.identif = identif
@@ -160,7 +145,35 @@ class Declaration_Affectation:
                 self.affectation = affectation
         def afficher(self, indent=0):
                 afficher("[Declaration-Affectation: " +str(self.type1)+ " "+str(self.identif)+ " "
-                         + str(self.affectation) + " " +str(self.expr) +"]", indent)
+                         + str(self.affectation) + " " +str(self.expr) +"]", indent)"""
+                         
+                         
+class Declaration:
+	def __init__(self, identifiant, expression, type):
+		self.identifiant = identifiant
+		self.expression = expression
+		self.type = type
+
+	def afficher(self, indent=0):
+		afficher("<declaration>", indent)
+		afficher(f"[Type: {self.type}]", indent + 1)
+		afficher(f"[Identifiant: {self.identifiant}]", indent + 1)
+		if self.expression:
+			self.expression.afficher(indent + 1)
+		afficher("</declaration>", indent)
+
+
+class Affectation:
+    def __init__(self, identifiant, expression):
+        self.identifiant = identifiant
+        self.expression = expression
+
+    def afficher(self, indent=0):
+        afficher("<affectation>", indent)
+        afficher(f"[Identifiant: {self.identifiant}]", indent + 1)
+        self.expression.afficher(indent + 1)
+        afficher("</affectation>", indent)
+        
 
 class Nom_Fonction:
 	def __init__(self):
