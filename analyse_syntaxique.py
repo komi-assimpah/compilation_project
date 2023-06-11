@@ -40,6 +40,7 @@ class FloParser(Parser):
 	def expr(self, p):
 		return arbre_abstrait.Operation('-',p[3],p[1])
 
+
 	@_('expr "+" produit')
 	def expr(self, p):
 		return arbre_abstrait.Operation('+',p[0],p[2])
@@ -52,6 +53,11 @@ class FloParser(Parser):
 	@_('expr "-" produit')
 	def expr(self, p):
                 return arbre_abstrait.Operation('-',p[0],p[2])
+            
+    #edit
+	@_('somme "-" produit') #duplicate
+	def somme(self, p):
+		return arbre_abstrait.Operation('-',p[0],p[2])
 
 	@_('produit "*" facteur')
 	def produit(self, p):
@@ -163,9 +169,7 @@ class FloParser(Parser):
                 return p.produit
         
 
-	@_('somme "-" produit') #duplicate
-	def somme(self, p):
-                return arbre_abstrait.Operation('-',p[0],p[2])
+
 
         
 
