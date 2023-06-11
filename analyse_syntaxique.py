@@ -3,7 +3,7 @@ from sly import Parser
 from analyse_lexicale import FloLexer
 import arbre_abstrait
 
-class FloParser(Parser):    
+class FloParser(Parser):
 	# On récupère la liste des lexèmes de l'analyse lexicale
 	tokens = FloLexer.tokens
 
@@ -17,12 +17,12 @@ class FloParser(Parser):
 		l = arbre_abstrait.ListeInstructions()
 		l.append(p.instruction)
 		return l
-					
+
 	@_('listeInstructions instruction')
 	def listeInstructions(self, p):
 		p.listeInstructions.append(p.instruction)
 		return p.listeInstructions
-		
+
 	@_('ecrire')
 	def instruction(self, p):
 		return p[0]
@@ -30,15 +30,15 @@ class FloParser(Parser):
 	"""@_('affectation')
 	def instruction(self, p):
 		return p[0]"""
-			
+
 	@_('ECRIRE "(" expr ")" ";"')
 	def ecrire(self, p):
 		return arbre_abstrait.Ecrire(p.expr) #p.expr = p[2]
-	
+
 	@_('"-" expr "+" produit')
 	def expr(self, p):
 		return arbre_abstrait.Operation('-',p[3],p[1])
-	
+
 	@_('expr "+" produit')
 	def expr(self, p):
 		return arbre_abstrait.Operation('+',p[0],p[2])
@@ -67,7 +67,7 @@ class FloParser(Parser):
 	@_('"-" expr')
 	def produit(self, p):
             return arbre_abstrait.Operation('*', arbre_abstrait.Entier(-1), p[1])
-	             
+
 	#3.3 Operarteurs Logiques
 	@_('NON booleen')
 	def booleen(self, p):
@@ -76,7 +76,7 @@ class FloParser(Parser):
 	@_('expr OU expr')
 	def booleen(self, p):
 		return arbre_abstrait.Disjonction(p[1], p[0], p[2])
-            
+
 	@_('expr ET expr')
 	def booleen(self, p):
 		return arbre_abstrait.Conjonction(p[1], p[0], p[2])
@@ -87,8 +87,33 @@ class FloParser(Parser):
 	def booleen(self, p):
                 return arbre_abstrait.Comparateur(p[1], p[0], p[2])
 
-            
-            
+
+
+    #4 Autres Instructions
+
+	@_('declaration') #Declaration
+	def instruction(self, p):
+		return p[0]
+
+	@_('TYPE IDENTIFIANT ";"')
+	def declaration(self, p):
+		return arbre_abstrait.Declaration(p.TYPE, p.IDENTIFIANT)
+
+	@_('affectation') #Affectation
+	def instruction(self, p):
+		return p[0]
+
+	@_('IDENTIFIANT AFFECTATION expr ";"')
+	def affectation(self, p):
+		return arbre_abstrait.Affectation('=', p.IDENTIFIANT, p.expr)
+
+	@_('declaration_affectation') #Declaration_Affectation
+	def instruction(self, p):
+		return p[0]
+
+	@_('TYPE IDENTIFIANT AFFECTATION expr ";"')
+	def declaration_affectation(self, p):
+		return arbre_abstrait.Declaration_Affectation('=', p.TYPE, p.IDENTIFIANT, p.expr)
 
 	@_('ENTIER')
 	def facteur(self, p):
@@ -97,7 +122,7 @@ class FloParser(Parser):
 	@_('BOOLEEN')
 	def facteur(self, p):
 		return arbre_abstrait.Booleen(p.BOOLEEN)
-  
+
 	@_('VRAI')
 	def booleen(self, p):
 		return arbre_abstrait.Booleen(True)
@@ -107,9 +132,9 @@ class FloParser(Parser):
 		return arbre_abstrait.Booleen(False)
 
 
-	@_('IDENTIFIANT')
+	"""@_('IDENTIFIANT')
 	def facteur(self, p):
-		return arbre_abstrait.Identifiant(p.IDENTIFIANT)
+		return arbre_abstrait.Identifiant(p.IDENTIFIANT)"""
 
 	#edit
 	@_('IDENTIFIANT')
@@ -124,13 +149,13 @@ class FloParser(Parser):
 	@_('produit')
 	def expr(self, p):
             return p.produit
-        
+
     #edit
 	@_('produit')
 	def somme(self, p):
 		return p.produit
-    
-    
+
+
 
 	@_('facteur')
 	def produit(self, p):
@@ -143,7 +168,7 @@ class FloParser(Parser):
 	@_('"(" expr ")"')
 	def facteur(self, p):
 		return p[1]
-		
+
 	@_('booleen')
 	def expr(self, p):
 		return p.booleen #ou p[1]
@@ -152,7 +177,7 @@ class FloParser(Parser):
 	def booleen(self, p):
 		return p.somme
 
-	
+
 
 	"""@_('lire()')
 	def facteur(self, p):

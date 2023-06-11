@@ -88,6 +88,31 @@ class Comparateur:
 		self.somme2.afficher(indent+1)
 		afficher("</comparateur>",indent)
 
+class Declaration:
+        def __init__(self, type1, identif):
+                self.type1 = type1
+                self.identif = identif
+        def afficher(self, indent=0):
+                afficher("[Declaration: " + str(self.type1) + " " + str(self.identif) +"]", indent)
+                         
+class Affectation:
+        def __init__(self, identif, affectation, expr):
+                self.identif = identif
+                self.affectation = affectation
+                self.expr = expr
+        def afficher(self, indent=0):
+                afficher("[Affectation: "+str(self.identif)+ " " + str(self.affectation) + " " +
+                         str(self.expr) +"]", indent)
+        
+class Declaration_Affectation:
+        def __init__(self, affectation, type1, identif, expr):
+                self.type1 = type1
+                self.identif = identif
+                self.expr = expr
+                self.affectation = affectation
+        def afficher(self, indent=0):
+                afficher("[Declaration-Affectation: " +str(self.type1)+ " "+str(self.identif)+ " "
+                         + str(self.affectation) + " " +str(self.expr) +"]", indent)
 
 class Entier:
 	def __init__(self,valeur):
@@ -111,6 +136,16 @@ class Identifiant:
         self.nomDevariable = nomDevariable
     def afficher(self, indent=0):
         afficher("[nomDevariable:"+str(self.nomDevariable)+"]", indent)
+        
+
+class Nom_Variable:
+    def __init__(self, affectation, nom_v, valeur):
+        self.nom_v = nom_v
+        self.valeur = valeur
+        self.affectation = affectation
+    def afficher(self, indent=0):
+        afficher("[nomVariable: "+str(self.nom_v)+ " " + str(self.affectation) + " " +
+                 str(self.valeur) +"]", indent)
 
 
 """class Affectation:
