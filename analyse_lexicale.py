@@ -8,8 +8,10 @@ class FloLexer(Lexer):
            		   INFERIEUR, INFERIEUR_OU_EGAL,
                    EGAL, PAS_EGAL,
                    SUPERIEUR, SUPERIEUR_OU_EGAL,
-                   MAX, RETOURNER, TANTQUE, SI, SINON_SI,
-                   SINON, ASSIGNMENT, TYPE_VARIABLE, NOM_VARIABLE, LIRE,
+                   #MAX, 
+                   RETOURNER, TANTQUE,
+                   SI, SINON,
+                   ASSIGNMENT, TYPE_VARIABLE, NOM_VARIABLE, LIRE,
                    VRAI, FAUX,
                    NON, ET, OU,
                    COMPARATEUR,
@@ -39,16 +41,16 @@ class FloLexer(Lexer):
 	FAUX = r'Faux'
 	EGAL = r'=='
 	#AFFECTATION = r'='
+	SI = r'si'
+	SINON = r'sinon'
+	TANTQUE = r'tantque'
 
 
 
 	"""-----------------------------
-	MAX = r'max'
 	RETOURNER = r'retourner'
-	TANTQUE = r'tantque'
-	SI = r'si'
-	SINON_SI = r'sinonsi'
-	SINON = r'sinon'
+
+
 	TYPE_VARIABLE = r'int|bool'
 	NOM_VARIABLE = r'[a-zA-Z][a-zA-Z0-9_]*'
 	LIRE = r'lire'
@@ -85,12 +87,11 @@ class FloLexer(Lexer):
 	IDENTIFIANT['entier'] = TYPE
 	IDENTIFIANT['booleen'] = TYPE
 	IDENTIFIANT['lire'] = LIRE
-	IDENTIFIANT['max'] = MAX
+	#IDENTIFIANT['max'] = MAX
 	IDENTIFIANT['retourner'] = RETOURNER
-	IDENTIFIANT['sinon_si'] = SINON_SI
-	IDENTIFIANT['si'] = SI
-	IDENTIFIANT['sinon'] = SINON
-	IDENTIFIANT['tantque'] = TANTQUE
+	"""IDENTIFIANT['si'] = SI
+	IDENTIFIANT['sinon'] = SINON"""
+	#IDENTIFIANT['tantque'] = TANTQUE
 
 	#Syntaxe des commentaires à ignorer
 	ignore_comment = r'\#.*'

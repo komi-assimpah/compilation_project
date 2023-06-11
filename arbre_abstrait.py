@@ -223,24 +223,49 @@ class Sinon_Si:
 		afficher("</sinon_si>",indent)
 
 
-class Sinon:
+"""class Sinon:
 	def __init__(self, liste):
 		self.list = []
 	def afficher(self,indent=0):
 		afficher("<sinon>",indent)
 		for instruction in self.list:
 			instruction.afficher(indent+1)
-		afficher("</sinon>",indent)
+		afficher("</sinon>",indent)"""
+  
+class Condition:
+	def __init__(self, expression, liste_instructions_vrai, suite_sinosi):
+		self.expression = expression
+		self.liste_instructions_vrai = liste_instructions_vrai
+		self.suite_sinosi = suite_sinosi
+
+	def afficher(self, indent=0):
+		afficher("<condition>", indent)
+		if self.expression:
+			self.expression.afficher(indent + 1)
+		afficher("<alors>", indent)
+		self.liste_instructions_vrai.afficher(indent + 1)
+		afficher("</alors>", indent)
+		if self.suite_sinosi:
+			if isinstance(self.suite_sinosi, Condition):
+				afficher("<sinon>", indent)
+				self.suite_sinosi.afficher(indent + 1)
+				afficher("</sinon>", indent)
+			else:
+				afficher("<sinon>", indent)
+				self.suite_sinosi.afficher(indent + 1)
+				afficher("</sinon>", indent)
+		afficher("</condition>", indent)
 		
-class Instruction_Boucle:
-	def __init__(self,bool1,liste):
-		self.bool1 = bool1
-		self.liste = liste
-	def afficher(self,indent=0):
-		afficher("<instruction_boucle>",indent)
-		self.bool1.afficher(indent+1)
-		self.liste.afficher(indent+1)
-		afficher("</instruction_boucle>",indent)
+class TantQue:
+	def __init__(self,expr,liste):
+		self.expr = expr
+		self.liste_instructions = liste_instructions
+
+	def afficher(self, indent=0):
+		afficher("<tantque>", indent)
+		self.expression.afficher(indent + 1)
+		self.liste_instructions.afficher(indent + 1)
+		afficher("</tantque>", indent)
 
 
 class Retourner:
@@ -285,13 +310,13 @@ class Appel_Fonction:
             afficher("</arguments>", indent + 1)
         afficher("</appelFonction>", indent)
 
-class Max:
+"""class Max:
 	def __init__(self,exp):
 		self.exp = exp
 	def afficher(self,indent=0):
 		afficher("<max>",indent)
 		self.exp.afficher(indent+1)
-		afficher("</max>",indent)
+		afficher("</max>",indent)"""
 
 
 class Parametre:

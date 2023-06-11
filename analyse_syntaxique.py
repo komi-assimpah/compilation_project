@@ -58,8 +58,8 @@ class FloParser(Parser):
 		l.append(p.instruction)
 		return l
 
-
-	@_('ecrire', 'appel_fonction_instr', 'appel_fonction_instr_without_parm')
+	#reviens
+	@_('ecrire', 'boucle', 'appel_fonction_instr', 'appel_fonction_instr_without_parm')
 	def instruction(self, p):
 		return p[0]
 
@@ -143,12 +143,7 @@ class FloParser(Parser):
 		return p.arg_list
 
 
-	"""@_('IDENTIFIANT')
-	def facteur(self, p):
-		return arbre_abstrait.Identifiant(p.IDENTIFIANT)"""
-
 	
-
 
 	@_('produit')
 	def expr(self, p):
@@ -170,21 +165,13 @@ class FloParser(Parser):
 
 	#2.3 Autres Factuers
 	
-	"""@_('IDENTIFIANT AFFECTATION ENTIER') #facteur nomVariable
-	def facteur(self, p):
-		return arbre_abstrait.Nom_Variable('=', p.IDENTIFIANT, p.ENTIER)"""
-	
-	@_('nomFonction') #facteur nomFonction
-	def facteur(self, p):
-                return p[0]
 
-	@_('IDENTIFIANT "(" facteur ")"')
-	def nomFonction(self, p):
-                return arbre_abstrait.Nom_Fonction(p.factuer)
 
 	@_('lire') #facteur lire()
 	def facteur(self, p):
 		return p[0]
+
+
 	
 	@_('LIRE "(" expr ")"')
 	def lire(self, p):
@@ -214,14 +201,7 @@ class FloParser(Parser):
         
 
                 
-	@_('variable')
-	def facteur(self, p):
-                return p.variable
 
-	#edit
-	@_('IDENTIFIANT')
-	def variable(self, p):
-                return arbre_abstrait.Identifiant(p.IDENTIFIANT)
 
     #3.2 Comparateurs
 	@_('expr COMPARATEUR expr',)
@@ -253,15 +233,10 @@ class FloParser(Parser):
 	def instruction(self, p):
 		return p[0]
 			
-
 	@_('affectation') #Affectation
 	def instruction(self, p):
 		return p[0]
 			
-  
-  
-  
-  
 	@_('TYPE IDENTIFIANT "=" expr ";"')
 	def declaration(self, p):
 		return arbre_abstrait.Declaration(p.IDENTIFIANT, p.expr, p.TYPE)
@@ -279,37 +254,39 @@ class FloParser(Parser):
 
 
 
-	@_('si') #SI
-	def instruction(self, p):
-		return p[0]
-			
-	@_('SI "(" expr ")" "{" listeInstructions "}"')
-	def si(self, p):
-		return arbre_abstrait.Si(p.expr, p.listeInstructions) 
 
-	@_('sinon_si') #SINON_SI
-	def instruction(self, p):
-		return p[0]
-			
-	@_('SINON_SI "(" expr ")" "{" listeInstructions "}"')
-	def sinon_si(self, p):
-		return arbre_abstrait.Sinon_Si(p.expr, p.listeInstructions) 
 
-	@_('sinon') #SINON 
+
+
+
+
+	@_('condition') #SI
 	def instruction(self, p):
 		return p[0]
-			
+
+	@_('SI "(" expr ")" "{" listeInstructions "}" suite_sinosi')
+	def condition(self, p):
+		return arbre_abstrait.Condition(p.expr, p.listeInstructions, p.suite_sinosi)
+
 	@_('SINON "{" listeInstructions "}"')
-	def sinon(self, p):
-		return arbre_abstrait.Sinon(p.listeInstructions)
+	def suite_sinosi(self, p):
+		return p.listeInstructions
 
-	@_('tantque') #TANTEQUE 
-	def instruction(self, p):
-		return p[0]
-			
+	@_('SINON SI "(" expr ")" "{" listeInstructions "}" suite_sinosi')
+	def suite_sinosi(self, p):
+		return arbre_abstrait.Condition(p.expr, p.listeInstructions, p.suite_sinosi)
+
+	@_('')
+	def suite_sinosi(self, p):
+		return None
+
 	@_('TANTQUE "(" expr ")" "{" listeInstructions "}"')
-	def tantque(self, p):
-		return arbre_abstrait.Instruction_Boucle(p.expr, p.listeInstructions) 
+	def boucle(self, p):
+		return arbre_abstrait.TantQue(p.expr, p.listeInstructions)
+    
+    
+
+
 
 
 
@@ -344,7 +321,7 @@ class FloParser(Parser):
 
 	@_('TYPE IDENTIFIANT "(" param_list ")" "{" listeInstructions "}"')
 	def fonction_declaration(self, p):
-		return arbre_abstrait.Fonction(p.IDENTIFIANT, p.type, p.param_list, p.listeInstructions)
+		return arbre_abstrait.Fonction(p.IDENTIFIANT, p.TYPE, p.param_list, p.listeInstructions)
 
 	@_("TYPE IDENTIFIANT '(' ')' '{' listeInstructions '}'")
 	def fonction_declaration_without_parm(self, p):
@@ -364,14 +341,18 @@ class FloParser(Parser):
 		return arbre_abstrait.Parametre(p.TYPE, p.IDENTIFIANT)
 
 
+	@_('variable')
+	def facteur(self, p):
+                return p.variable
 
+	#edit
+	@_('IDENTIFIANT')
+	def variable(self, p):
+                return arbre_abstrait.Identifiant(p.IDENTIFIANT)
 
 
         
 
-	"""@_('appel_fonction') #Appel de fonction
-	def instruction(self, p):
-                return p[0]"""
             
 	@_('appel_fonction_expr')
 	def facteur(self, p):
@@ -384,18 +365,6 @@ class FloParser(Parser):
 
 
 
-	"""@_('IDENTIFIANT "(" facteur ")" ";"') #Appel de fonction
-	def appel_fonction(self, p):
-                return arbre_abstrait.Appel_Fonction(p.IDENTIFIANT)"""
-
-	@_('max') #Max
-	def instruction(self, p):
-                return p[0]
-        
-	@_('MAX "(" expr ")" ";"') #Max
-	def max(self, p):
-                return arbre_abstrait.Max(p.expr)
-        
 
 
 
