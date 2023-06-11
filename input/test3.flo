@@ -1,11 +1,11 @@
-#ecrire(-7);
+ecrire(x != -7);
 #ecrire(1%3);
 #ecrire(9/3);
 #ecrire(-1*7+3);
 #ecrire(myInt = 7);
 #ecrire(lire(9/3));
 #ecrire(1+3<2+7);
-si(-7){ecrire(g = 1)}
+#si(-7){ecrire(g = 1)}
 #res = entier1;
 #sinon_si(-7){
 #res = entier1;

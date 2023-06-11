@@ -12,12 +12,12 @@ class Programme:
 		self.listeInstructions.afficher(indent+1)
 		afficher("</programme>",indent)
 
-class ListeInstructions:
+class ListeInstructions (list):
 	def __init__(self):
 		self.instructions = []
 	def afficher(self,indent=0):
 		afficher("<listeInstructions>",indent)
-		for instruction in self.instructions:
+		for instruction in self:
 			instruction.afficher(indent+1)
 		afficher("</listeInstructions>",indent)
 			
@@ -50,6 +50,43 @@ class Operation:
 		self.exp1.afficher(indent+1)
 		self.exp2.afficher(indent+1)
 		afficher("</operation>",indent)
+  
+class Negation:
+	def __init__(self,op,bool1):
+		self.bool1 = bool1
+		self.op = op
+	def afficher(self,indent=0):
+		afficher("<negation>",indent)
+		afficher(self.op,indent+1)
+		self.bool1.afficher(indent+1)
+		afficher("</negation>",indent)
+
+class Disjonction:
+	def __init__(self,op,bool1,bool2):
+		self.bool1 = bool1
+		self.op = op
+		self.bool2 = bool2
+	def afficher(self,indent=0):
+		afficher("<disjonction>",indent)
+		afficher(self.op,indent+1)
+		self.bool1.afficher(indent+1)
+		self.bool2.afficher(indent+1)
+		afficher("</disjonction>",indent)
+
+class Conjonction:
+	def __init__(self,op,bool1,bool2):
+		self.bool1 = bool1
+		self.op = op
+		self.bool2 = bool2
+	def afficher(self,indent=0):
+		afficher("<conjonction>",indent)
+		afficher(self.op,indent+1)
+		self.bool1.afficher(indent+1)
+		self.bool2.afficher(indent+1)
+		afficher("</conjonction>",indent)
+
+
+
 
 class Comparateur:
 	def __init__(self,comparateur,somme1,somme2):
@@ -67,7 +104,27 @@ class Entier:
 	def __init__(self,valeur):
 		self.valeur = valeur
 	def afficher(self,indent=0):
-		afficher("[Entier: "+str(self.valeur)+"]",indent)
+		afficher("[Entier:"+str(self.valeur)+"]",indent)
+  
+class Booleen:
+	def __init__(self, valeur):
+		self.valeur = valeur
+	def afficher(self, indent=0):
+		if (self.valeur == True):
+			afficher(f"[Booleen:vrai]", indent)
+		elif (self.valeur == False):
+			afficher(f"[Booleen:faux]", indent)
+		else:
+				afficher("[Booleen:"+str(self.valeur)+"]", indent)
+     
+class Identifiant:
+    def __init__(self, nomDevariable):
+        self.nomDevariable = nomDevariable
+    def afficher(self, indent=0):
+        afficher("[nomDevariable:"+str(self.nomDevariable)+"]", indent)
+        
+
+
 
 
 class Nom_Variable:
@@ -77,65 +134,8 @@ class Nom_Variable:
         self.affectation = affectation
     def afficher(self, indent=0):
         afficher("[nomVariable: "+str(self.nom_v)+ " " + str(self.affectation) + " " +
-                 str(self.valeur) +"]", indent)
-
-class Nom_Fonction:
-	def __init__(self):
-		self.exprs = []
-	def afficher(self,indent=0):
-		afficher("<nom_fonction>",indent)
-		for expr in self.exprs:
-			instruction.afficher(indent+1)
-		afficher("</nom_fonction>",indent)
-
-
-class Identifiant:
-	def __init__(self,valeur):
-		self.valeur = valeur
-	def afficher(self,indent=0):
-		afficher("[Identifiant: "+str(self.valeur)+"]",indent)
-
-class Booleen:
-	def __init__(self,valeur):
-		self.valeur = valeur
-	def afficher(self,indent=0):
-		afficher("[Booleen: "+str(self.valeur)+"]",indent)
-
-class Vrai:
-	def __init__(self,valeur):
-		self.valeur = valeur
-	def afficher(self,indent=0):
-		afficher("[" + str(self.valeur)+"]",indent)
-
-class Faux:
-	def __init__(self,valeur):
-		self.valeur = valeur
-	def afficher(self,indent=0):
-		afficher("[" + str(self.valeur)+"]",indent)
-
-class Negation:
-	def __init__(self,op,bool1):
-                self.bool1 = bool1
-                self.op = op
-	def afficher(self,indent=0):
-		afficher("<negation>",indent)
-		afficher(self.op,indent+1)
-		self.bool1.afficher(indent+1)
-		afficher("</negation>",indent)
-
-class Conjonction:
-	def __init__(self,op,bool1,bool2):
-                self.bool1 = bool1
-                self.op = op
-                self.bool2 = bool2
-	def afficher(self,indent=0):
-		afficher("<conjonction>",indent)
-		afficher(self.op,indent+1)
-		self.bool1.afficher(indent+1)
-		self.bool2.afficher(indent+1)
-		afficher("</conjonction>",indent)
-
-
+                 str(self.valeur) +"]", indent)       
+        
 class Declaration:
         def __init__(self, type1, identif):
                 self.type1 = type1
@@ -144,10 +144,10 @@ class Declaration:
                 afficher("[Declaration: " + str(self.type1) + " " + str(self.identif) +"]", indent)
                          
 class Affectation:
-        def __init__(self, affectation, identif, expr):
+        def __init__(self, identif, affectation, expr):
                 self.identif = identif
-                self.expr = expr
                 self.affectation = affectation
+                self.expr = expr
         def afficher(self, indent=0):
                 afficher("[Affectation: "+str(self.identif)+ " " + str(self.affectation) + " " +
                          str(self.expr) +"]", indent)
@@ -161,6 +161,16 @@ class Declaration_Affectation:
         def afficher(self, indent=0):
                 afficher("[Declaration-Affectation: " +str(self.type1)+ " "+str(self.identif)+ " "
                          + str(self.affectation) + " " +str(self.expr) +"]", indent)
+
+class Nom_Fonction:
+	def __init__(self):
+		self.exprs = []
+	def afficher(self,indent=0):
+		afficher("<nom_fonction>",indent)
+		for expr in self.exprs:
+			instruction.afficher(indent+1)
+		afficher("</nom_fonction>",indent)
+
 
 class Si:
 	def __init__(self, expr, liste):
