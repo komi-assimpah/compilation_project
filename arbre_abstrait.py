@@ -46,12 +46,10 @@ class Ecrire:
 		afficher("</ecrire>",indent)
 
 class Lire:
-	def __init__(self,exp):
+	def __init__(self,exp=None):
 		self.exp = exp
 	def afficher(self,indent=0):
-		afficher("<lire>",indent)
-		self.exp.afficher(indent+1)
-		afficher("</lire>",indent)
+		afficher("[lire:]", indent)
 
 
 		
@@ -212,25 +210,7 @@ class Si:
 		afficher("</si>",indent)
 
 
-class Sinon_Si:
-	def __init__(self, expr, liste):
-		self.liste = liste
-		self.expr = expr
-	def afficher(self,indent=0):
-		afficher("<sinon_si>",indent)
-		self.expr.afficher(indent+1)
-		self.liste.afficher(indent+1)
-		afficher("</sinon_si>",indent)
 
-
-"""class Sinon:
-	def __init__(self, liste):
-		self.list = []
-	def afficher(self,indent=0):
-		afficher("<sinon>",indent)
-		for instruction in self.list:
-			instruction.afficher(indent+1)
-		afficher("</sinon>",indent)"""
   
 class Condition:
 	def __init__(self, expression, liste_instructions_vrai, suite_sinonsi):
@@ -326,6 +306,6 @@ class Parametre:
 
     def afficher(self, indent=0):
         afficher("<parametre>", indent)
-        afficher(f"[Identifiant: {self.identifiant}]", indent + 1)
         afficher(f"[Type: {self.type}]", indent + 1)
+        afficher(f"[Identifiant: {self.identifiant}]", indent + 1)
         afficher("</parametre>", indent)

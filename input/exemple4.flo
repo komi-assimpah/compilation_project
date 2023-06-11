@@ -1,13 +1,13 @@
-#ecrire(Vrai);
-#ecrire(Faux);
-#ecrire(non Vrai);
-#ecrire(non Faux);
-#ecrire(non 6);
+ecrire(Vrai);
+ecrire(Faux);
+ecrire(non Vrai);
+ecrire(non Faux);
+ecrire(non 6);
 
-#ecrire(a ou b);
+ecrire(a ou b);
 ecrire(non Vrai ou Faux);
 
-#ecrire(non Vrai et Faux);
+ecrire(non Vrai et Faux);
 
 ecrire(Vrai et non Faux);
 

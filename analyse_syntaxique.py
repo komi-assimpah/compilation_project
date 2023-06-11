@@ -167,15 +167,15 @@ class FloParser(Parser):
 	
 
 
-	@_('lire') #facteur lire()
+	"""@_('lire') #facteur lire()
 	def facteur(self, p):
-		return p[0]
+		return p[0]"""
 
 
 	
-	@_('LIRE "(" expr ")"')
-	def lire(self, p):
-		return arbre_abstrait.Lire(p.expr)
+	@_('LIRE "(" ")"')
+	def facteur(self, p):
+		return arbre_abstrait.Lire()
 
 			
 	#3. Expressions Booléennes

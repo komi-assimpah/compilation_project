@@ -8,14 +8,13 @@ class FloLexer(Lexer):
            		   INFERIEUR, INFERIEUR_OU_EGAL,
                    EGAL, PAS_EGAL,
                    SUPERIEUR, SUPERIEUR_OU_EGAL,
-                   #MAX, 
                    RETOURNER, TANTQUE,
                    SI, SINON,
-                   ASSIGNMENT, TYPE_VARIABLE, NOM_VARIABLE, LIRE,
+                   ASSIGNMENT, TYPE_VARIABLE, NOM_VARIABLE,
+                   LIRE,
                    VRAI, FAUX,
                    NON, ET, OU,
                    COMPARATEUR,
-                   #AFFECTATION,
                    TYPE
             }
 
@@ -33,7 +32,10 @@ class FloLexer(Lexer):
 
 	# Expressions régulières correspondant au différents Lexèmes par ordre de priorité
 
-
+	LIRE = r'lire'
+	SINON = r'sinon'
+	SI = r'si'
+	TANTQUE = r'tantque'
 	NON= r'non'
 	OU= r'ou'
 	ET= r'et'
@@ -41,14 +43,12 @@ class FloLexer(Lexer):
 	FAUX = r'Faux'
 	EGAL = r'=='
 	#AFFECTATION = r'='
-	SI = r'si'
-	SINON = r'sinon'
-	TANTQUE = r'tantque'
+
+
 
 
 
 	"""-----------------------------
-	RETOURNER = r'retourner'
 
 
 	TYPE_VARIABLE = r'int|bool'
@@ -80,14 +80,12 @@ class FloLexer(Lexer):
 
     	# cas général
 	IDENTIFIANT = r'[a-zA-Z][a-zA-Z0-9_]*' #en général, variable ou nom de fonction
-	#IDENTIFIANT = r'(entier\b|booleen\b)[a-zA-Z][a-zA-Z0-9_]*'
 
 	# cas spéciaux:
 	IDENTIFIANT['ecrire'] = ECRIRE
 	IDENTIFIANT['entier'] = TYPE
 	IDENTIFIANT['booleen'] = TYPE
-	IDENTIFIANT['lire'] = LIRE
-	#IDENTIFIANT['max'] = MAX
+	#IDENTIFIANT['lire'] = LIRE
 	IDENTIFIANT['retourner'] = RETOURNER
 	"""IDENTIFIANT['si'] = SI
 	IDENTIFIANT['sinon'] = SINON"""
