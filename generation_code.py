@@ -99,7 +99,9 @@ def gen_expression(expression):
 	if type(expression) == arbre_abstrait.Operation:
 		gen_operation(expression) #on calcule et empile la valeur de l'opération
 	elif type(expression) == arbre_abstrait.Entier:
-      		nasm_instruction("push", str(expression.valeur), "", "", "") ; #on met sur la pile la valeur entière			
+      		nasm_instruction("push", str(expression.valeur), "", "", "") ; #on met sur la pile la valeur entière
+      	elif type(expression) == arbre_abstrait.Booleen:
+      		nasm_instruction("push", str(expression.valeur), "", "", "") ; #on met sur la pile la valeur booleen
 	else:
 		print("type d'expression inconnu",type(expression))
 		exit(0)
@@ -121,18 +123,32 @@ def gen_operation(operation):
 	#Voir: https://www.bencode.net/blob/nasmcheatsheet.pdf
 	if op in ['+']:
 		nasm_instruction(code[op], "eax", "ebx", "", "effectue l'opération eax" +op+"ebx et met le résultat dans eax" )
+
 	if op in ['-']:
 		nasm_instruction(code[op], "eax", "ebx", "", "effectue l'opération eax" +op+"ebx et met le résultat dans eax" )
 
 	if op == '*':
 		nasm_instruction(code[op], "ebx", "", "", "effectue l'opération eax" +op+"ebx et met le résultat dans eax" )
 	nasm_instruction("push",  "eax" , "", "", "empile le résultat");
+
 	if op == '/':
-		nasm_instruction(code[op], "ebx", "", "", "effectue l'opération eax" +op+"ebx et met le résultat dans eax" )
+		nasm_instruction(code[op], "ebx", "eax", "", "effectue l'opération eax" +op+"ebx et met le résultat dans ebx" )
 	nasm_instruction("push",  "eax" , "", "", "empile le résultat");
+
 	if op == '%':
-		nasm_instruction(code[op], "ebx", "", "", "effectue l'opération eax" +op+"ebx et met le résultat dans eax" )
+		nasm_instruction(code[op], "ebx", "eax", "", "effectue l'opération eax" +op+"ebx et met le résultat dans ebx" )
 	nasm_instruction("push",  "eax" , "", "", "empile le résultat");
+
+
+"""
+Affiche le code nasm correspondant au lire();
+"""	
+def gen_lire(lire):
+	gen_expression(lire.exp) #on calcule et empile la valeur d'expression
+	nasm_instruction("mov", "eax", "sinput", "", "")
+	nasm_instruction("call", "readline", "", "", "") 
+	nasm_instruction("call", "atoi", "", "", "") 
+	nasm_instruction("push", "eax", "", "", "") 
 
 
 if __name__ == "__main__":
